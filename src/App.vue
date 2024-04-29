@@ -51,6 +51,13 @@ import Header from './components/Header.vue';
   display: flex;
   flex-direction: column;
   width: 300px;
+  transition: all ease 0.5s;
+}
+.card:hover {
+  -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  transform: translateY(-2px);
 }
 .card__image {
   display: block;
@@ -58,6 +65,7 @@ import Header from './components/Header.vue';
 .card__image-container,
 .card__content {
   position: relative;
+  padding-bottom: 10px;
 }
 
 .card__status {
@@ -81,28 +89,27 @@ import Header from './components/Header.vue';
   cursor: pointer;
   z-index: 10;
 }
-.card__image-container{
+.card__image-container {
   margin-bottom: 20px;
-
 }
-.card__price{
+.card__price {
   font-size: 20px;
   font-weight: 600;
   line-height: 1;
-  color: #1D1D1D;
+  color: #1d1d1d;
   margin-bottom: 20px;
 }
 .card__brand,
-.card__title{
+.card__title {
   font-size: 14px;
   font-weight: 400;
   line-height: 1;
-  color: #1D1D1D;
+  color: #1d1d1d;
 }
-.card__brand{
+.card__brand {
   margin-bottom: 10px;
 }
-.card__bag{
+.card__bag {
   display: block;
   height: 24px;
   width: 24px;
