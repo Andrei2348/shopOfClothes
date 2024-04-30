@@ -38,6 +38,13 @@
         </div>
       </div>
     </div>
+    <div class="header__categories">
+      <div class="container">
+        <ul class="header__categories-items">
+          <li class="header__categories-item"></li>
+        </ul>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -47,6 +54,7 @@
   left: 0;
   right: 0;
   top: 0;
+  z-index: 30;
 }
 .header__title-text {
   font-size: 14px;
@@ -56,6 +64,7 @@
   color: #565656;
   text-align: center;
   text-transform: uppercase;
+  background-color: #fff;
 }
 .header__wrapper {
   background-color: #1d1d1d;
