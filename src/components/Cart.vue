@@ -11,12 +11,12 @@
       <li class="cart__header-item">Количество</li>
       <li class="cart__header-item">Сумма</li>
     </ul>
-    <CartItem />
+    <CartItemList />
   </div>
 </template>
 
 <script setup>
-import CartItem from './CartItem.vue';
+import CartItemList from './CartItemList.vue';
 </script>
 
 <style scoped>
