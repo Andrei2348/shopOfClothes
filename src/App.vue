@@ -37,7 +37,7 @@ const items = ref([])
 // Реактивность для объекта
 const filters = reactive({
   sortBy: '',
-  searchQuery: ''
+  searchQuery: '',
 })
 
 // const sortBy = ref('')
@@ -48,26 +48,21 @@ const onChangeSelect = (data) => {
   filters.sortBy = data
 }
 
-onMounted(async () => {
-  try {
-    const { data } = await axios.get('https://78f27ce1435ab43d.mokky.dev/items')
-    items.value = data
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-// Фильтрация
-watch(filters, async () => {
+const fetchItems = async () => {
   try {
     const { data } = await axios.get(
-      'https://78f27ce1435ab43d.mokky.dev/items?sortBy=' + filters.sortBy
+      'https://78f27ce1435ab43d.mokky.dev/items' + filters.sortBy
     )
     items.value = data
   } catch (error) {
     console.log(error)
   }
-})
+}
+
+onMounted(fetchItems)
+
+// Фильтрация
+watch(filters, fetchItems)
 </script>
 
 <style scoped></style>
