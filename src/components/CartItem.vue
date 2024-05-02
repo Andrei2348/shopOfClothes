@@ -12,6 +12,17 @@
   </div>
 </template>
 
+<script setup>
+defineProps({
+  imageUrl: String,
+  color: String,
+  size: String,
+  price: Number,
+  count: Number,
+  sum: Number
+});
+</script>
+
 <style scoped>
 .cart__wrapper {
   margin-top: 30px;
@@ -33,5 +44,6 @@
   position: absolute;
   bottom: 0;
   right: 0;
+  cursor: pointer;
 }
 </style>

@@ -41,7 +41,11 @@
     <div class="header__categories">
       <div class="container">
         <ul class="header__categories-items">
-          <li class="header__categories-item"></li>
+          <li class="header__categories-item">новинки</li>
+          <li class="header__categories-item">одежда</li>
+          <li class="header__categories-item">Обувь</li>
+          <li class="header__categories-item">аксессуары</li>
+          <li class="header__categories-item">Любимые бренды</li>
         </ul>
       </div>
     </div>
@@ -98,5 +102,20 @@
 .header__profile-item,
 .header__menu-item {
   cursor: pointer;
+}
+.header__categories{
+  background: #fff;
+}
+.header__categories-items{
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 22px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 14px;
+  color: #565656;
+  cursor: pointer;
+  text-transform: uppercase;
+  gap: 24px;
 }
 </style>
