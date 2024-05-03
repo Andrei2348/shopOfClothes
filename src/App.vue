@@ -6,8 +6,7 @@
   <input v-model="count" /> -->
 
   <main class="main">
-    <Header />
-
+    <Header @searchEvent="onChangeSearchInput" />
     <div class="container">
       <CardList :items="items" @selectEvent="onChangeSelect" />
       <Cart />
@@ -36,7 +35,7 @@ import Cart from './components/Cart.vue'
 const items = ref([])
 // Реактивность для объекта
 const filters = reactive({
-  sortBy: '',
+  sortBy: 'title',
   searchQuery: '',
 })
 
@@ -48,10 +47,21 @@ const onChangeSelect = (data) => {
   filters.sortBy = data
 }
 
+const onChangeSearchInput = (data) => {
+  filters.searchQuery = data
+}
+
 const fetchItems = async () => {
   try {
+    const params = {
+      sortBy: filters.sortBy,
+    }
+    if (filters.searchQuery) {
+      params.title = `*${filters.searchQuery}*`
+    }
     const { data } = await axios.get(
-      'https://78f27ce1435ab43d.mokky.dev/items' + filters.sortBy
+      `https://78f27ce1435ab43d.mokky.dev/items`,
+      { params }
     )
     items.value = data
   } catch (error) {

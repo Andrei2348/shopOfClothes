@@ -35,13 +35,10 @@ defineProps({
   items: Array,
 })
 
-
-
-const emit = defineEmits(['selectEvent']);
+const emit = defineEmits(['selectEvent'])
 const onChangeSelect = (event) => {
   emit('selectEvent', event.target.value)
 }
-
 
 const onClcikAdd = () => {
   console.log('добавление в корзину')
@@ -50,10 +47,6 @@ const onClcikFavorite = () => {
   console.log('добавление в закладки')
 }
 
-
-
-
-
 // const onChangeSelect = (event) => {
 //   console.log(event.target.value)
 //   $emit('onChangeSelect', {
@@ -61,8 +54,6 @@ const onClcikFavorite = () => {
 //   })
 // }
 </script>
-
-
 
 <style scoped>
 .cards__title {

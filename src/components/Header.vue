@@ -23,16 +23,41 @@
           </ul>
           <ul class="header__profile-items">
             <li class="header__profile-item">
-              <img src="/public/icons/search.svg" alt="Search" />
+              <input
+                :class="[switcher ? 'visible' : '']"
+                type="text"
+                class="header__profile-search"
+                placeholder="Поиск..."
+                @input="onChangeSearchInput"
+              />
+              <!-- // v-if="switcher" // :class="visible" // -->
+              <img
+                class="header__profile-item--icon"
+                src="/public/icons/search.svg"
+                alt="Search"
+                @click="showSearchInput"
+              />
             </li>
             <li class="header__profile-item">
-              <img src="/public/icons/user.svg" alt="User" />
+              <img
+                class="header__profile-item--icon"
+                src="/public/icons/user.svg"
+                alt="User"
+              />
             </li>
             <li class="header__profile-item">
-              <img src="/public/icons/heart.svg" alt="Heart" />
+              <img
+                class="header__profile-item--icon"
+                src="/public/icons/heart.svg"
+                alt="Heart"
+              />
             </li>
             <li class="header__profile-item">
-              <img src="/public/icons/bag.svg" alt="Bag" />
+              <img
+                class="header__profile-item--icon"
+                src="/public/icons/bag.svg"
+                alt="Bag"
+              />
             </li>
           </ul>
         </div>
@@ -51,6 +76,20 @@
     </div>
   </header>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+const switcher = ref(false)
+
+const emit = defineEmits(['searchEvent'])
+const onChangeSearchInput = (event) => {
+  emit('searchEvent', event.target.value)
+}
+const showSearchInput = () => {
+  console.log('switch')
+  switcher.value = !switcher.value
+}
+</script>
 
 <style scoped>
 .header {
@@ -103,12 +142,16 @@
 .header__menu-item {
   cursor: pointer;
 }
-.header__categories{
+.header__profile-item {
+  position: relative;
+}
+.header__categories {
   background: #fff;
 }
-.header__categories-items{
+.header__categories-items {
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 20px 0 22px;
   font-size: 14px;
   font-weight: 600;
@@ -117,5 +160,36 @@
   cursor: pointer;
   text-transform: uppercase;
   gap: 24px;
+}
+.header__profile-item--icon {
+  height: 24px;
+  width: 24px;
+  display: inline-block;
+}
+.header__profile-search {
+  font-size: 16px;
+  padding: 0px 10px;
+  position: absolute;
+
+  top: 50%;
+  transform: translateY(-50%);
+  left: -160px;
+  border: none;
+  border-radius: 4px;
+  background: #565656;
+  color: #fff;
+  outline: none;
+  transition: ease all 1s;
+  opacity: 0;
+  width: 150px;
+  height: 0;
+  visibility: hidden;
+}
+.header__profile-search.visible {
+  height: 100%;
+  padding: 6px;
+  padding-bottom: 6px;
+  opacity: 1;
+  visibility: visible;
 }
 </style>
