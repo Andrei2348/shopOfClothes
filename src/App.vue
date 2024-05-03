@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive, watch } from 'vue'
+import { onMounted, ref, reactive, watch, provide } from 'vue'
 import axios from 'axios'
 import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
@@ -51,6 +51,33 @@ const onChangeSearchInput = (data) => {
   filters.searchQuery = data
 }
 
+const addToFavorite = async (item) => {
+  console.log(item)
+}
+
+const fetchFavorites = async () => {
+  try {
+    const { data: favorites } = await axios.get(
+      `https://78f27ce1435ab43d.mokky.dev/favorites`
+    )
+    items.value = items.value.map((item) => {
+      const favorite = favorites.find(
+        (favorite) => favorite.parentId === item.id
+      )
+      if (!favorite) {
+        return item
+      }
+      return {
+        ...item,
+        isFavorite: true,
+        favoriteId: favorite.id,
+      }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const fetchItems = async () => {
   try {
     const params = {
@@ -63,7 +90,13 @@ const fetchItems = async () => {
       `https://78f27ce1435ab43d.mokky.dev/items`,
       { params }
     )
-    items.value = data
+    // Для всех товаров назначаем значения:
+    items.value = data.map((obj) => ({
+      ...obj,
+      // isFavorite: false,
+      isAdded: false,
+    }))
+    console.log(data)
   } catch (error) {
     console.log(error)
   }
@@ -73,6 +106,7 @@ onMounted(fetchItems)
 
 // Фильтрация
 watch(filters, fetchItems)
+provide('addToFavorite', addToFavorite)
 </script>
 
 <style scoped></style>

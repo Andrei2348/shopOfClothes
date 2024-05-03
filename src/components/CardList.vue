@@ -15,6 +15,7 @@
   <div class="cards__wrapper">
     <Card
       v-for="item in items"
+      :id="item.id"
       :key="item.id"
       :title="item.title"
       :price="item.price"
@@ -23,7 +24,6 @@
       :isFavorite="item.isFavorite"
       :imageUrl="item.imageUrl"
       :onClcikAdd="onClcikAdd"
-      :onClcikFavorite="onClcikFavorite"
     />
   </div>
 </template>
@@ -43,9 +43,8 @@ const onChangeSelect = (event) => {
 const onClcikAdd = () => {
   console.log('добавление в корзину')
 }
-const onClcikFavorite = () => {
-  console.log('добавление в закладки')
-}
+
+
 
 // const onChangeSelect = (event) => {
 //   console.log(event.target.value)

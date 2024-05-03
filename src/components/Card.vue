@@ -1,7 +1,10 @@
 <!-- @format -->
 
 <script setup>
-defineProps({
+import { inject, ref } from 'vue'
+
+const props = defineProps({
+  id: Number,
   title: String,
   imageUrl: String,
   price: Number,
@@ -9,8 +12,20 @@ defineProps({
   isFavorite: Boolean,
   isAdded: Boolean,
   onClcikAdd: Function,
-  onClcikFavorite: Function,
-});
+})
+
+const favourFlag = ref(props.isFavorite)
+const addToFavorite = inject('addToFavorite')
+
+const onClickFavorite = () => {
+  favourFlag.value = !favourFlag.value
+  const obj = {
+    ...props,
+    isFavorite: favourFlag.value,
+    parentId: props.id,
+  }
+  addToFavorite(obj)
+}
 </script>
 
 <template>
@@ -20,9 +35,13 @@ defineProps({
       <div class="card__status">New</div>
       <img
         class="card__heart"
-        :src="!isFavorite ? '/public/icons/card_heart.svg' : '/public/icons/card_heartRed.svg'"
+        :src="
+          !favourFlag
+            ? '/public/icons/card_heart.svg'
+            : '/public/icons/card_heartRed.svg'
+        "
         alt="Heart"
-        @click="onClcikFavorite"
+        @click="onClickFavorite"
       />
     </div>
     <div class="card__content">
@@ -31,7 +50,7 @@ defineProps({
       <p class="card__title">{{ title }}</p>
       <img
         class="card__bag"
-        :src="isAdded ? '/public/icons/card_bag.svg' : ''"
+        :src="!isAdded ? '/public/icons/card_bag.svg' : ''"
         alt="Bag"
         @click="onClcikAdd"
       />
