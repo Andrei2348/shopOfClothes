@@ -52,7 +52,28 @@ const onChangeSearchInput = (data) => {
 }
 
 const addToFavorite = async (item) => {
-  console.log(item)
+  try {
+    // Если в isFavorite присвоено true, заносим в бд, иначе удаляем из бд
+    if (item.isFavorite) {
+      const obj = {
+        parentId: item.id,
+      }
+      const { data } = await axios.post(
+        `https://78f27ce1435ab43d.mokky.dev/favorites`,
+        obj
+      )
+      item.favoriteId = data.id
+      console.log('returned data=', item)
+    } else {
+      // await axios.delete(`https://78f27ce1435ab43d.mokky.dev/favorites/`, {
+      //   data: { parentId: item.parentId },
+      // })
+      item.favoriteId = null
+    }
+  } catch (error) {
+    console.log(error)
+  }
+  console.log('resultItem=', item)
 }
 
 const fetchFavorites = async () => {
@@ -93,9 +114,11 @@ const fetchItems = async () => {
     // Для всех товаров назначаем значения:
     items.value = data.map((obj) => ({
       ...obj,
-      // isFavorite: false,
+      isFavorite: false,
+      favoriteId: null,
       isAdded: false,
     }))
+    // fetchFavorites()
     console.log(data)
   } catch (error) {
     console.log(error)

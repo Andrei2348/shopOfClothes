@@ -35,6 +35,7 @@ defineProps({
   items: Array,
 })
 
+// Выбор фильтрации по цене
 const emit = defineEmits(['selectEvent'])
 const onChangeSelect = (event) => {
   emit('selectEvent', event.target.value)
@@ -43,15 +44,6 @@ const onChangeSelect = (event) => {
 const onClcikAdd = () => {
   console.log('добавление в корзину')
 }
-
-
-
-// const onChangeSelect = (event) => {
-//   console.log(event.target.value)
-//   $emit('onChangeSelect', {
-//     data: event.target.value,
-//   })
-// }
 </script>
 
 <style scoped>

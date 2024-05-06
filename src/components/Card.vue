@@ -1,33 +1,4 @@
 <!-- @format -->
-
-<script setup>
-import { inject, ref } from 'vue'
-
-const props = defineProps({
-  id: Number,
-  title: String,
-  imageUrl: String,
-  price: Number,
-  brand: String,
-  isFavorite: Boolean,
-  isAdded: Boolean,
-  onClcikAdd: Function,
-})
-
-const favourFlag = ref(props.isFavorite)
-const addToFavorite = inject('addToFavorite')
-
-const onClickFavorite = () => {
-  favourFlag.value = !favourFlag.value
-  const obj = {
-    ...props,
-    isFavorite: favourFlag.value,
-    parentId: props.id,
-  }
-  addToFavorite(obj)
-}
-</script>
-
 <template>
   <div class="card">
     <div class="card__image-container">
@@ -57,6 +28,35 @@ const onClickFavorite = () => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { inject, ref } from 'vue'
+
+const props = defineProps({
+  id: Number,
+  title: String,
+  imageUrl: String,
+  price: Number,
+  brand: String,
+  isFavorite: Boolean,
+  favoriteId: Number,
+  isAdded: Boolean,
+  onClcikAdd: Function,
+})
+
+const favourFlag = ref(props.isFavorite)
+const addToFavorite = inject('addToFavorite')
+
+const onClickFavorite = () => {
+  favourFlag.value = !favourFlag.value
+  const obj = {
+    ...props,
+    isFavorite: favourFlag.value,
+    parentId: props.id,
+  }
+  addToFavorite(obj)
+}
+</script>
 
 <style scoped>
 .card {
