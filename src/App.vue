@@ -9,13 +9,18 @@
         @addToFavorite="addToFavorite"
         @addToCart="addToCart"
       />
-      <Cart v-if="cartOpen" @closeCart="closeCart" />
+      <Cart
+        v-if="cartOpen"
+        @closeCart="closeCart"
+        @createOrder="createOrder"
+        :totalPrice="totalPrice"
+      />
     </div>
   </main>
 </template>
 
 <script setup>
-import { onMounted, ref, reactive, watch, provide } from 'vue'
+import { onMounted, computed, ref, reactive, watch, provide } from 'vue'
 import axios from 'axios'
 import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
@@ -55,6 +60,20 @@ const closeCart = () => {
   cartOpen.value = false
 }
 
+// Функция вычисления итоговой стоимости
+// Добавить в поля бд count и sum
+const totalPrice = computed(() =>
+  cart.value.reduce((acc, item) => acc + item.price, 0)
+)
+
+// const totalPrice = computed(() =>
+//   cart.value.reduce((acc, item) => acc + item.sum, 0)
+// )
+
+// const totalCount = computed(() =>
+//   cart.value.reduce((acc, item) => acc + item.count, 1)
+// )
+
 // Функция сортировки
 const onChangeSelect = (data) => {
   filters.sortBy = data
@@ -63,16 +82,39 @@ const onChangeSelect = (data) => {
 const onChangeSearchInput = (data) => {
   filters.searchQuery = data
 }
+// ============ Orders ===============
+const createOrder = async () => {
+  try {
+    const { data } = await axios.post(
+      `https://78f27ce1435ab43d.mokky.dev/orders`,
+      {
+        items: cart.value,
+        // totalCount: totalCount.value,
+        totalPrice: totalPrice.value,
+      }
+    )
+    // При оформлении заказа очищаем корзину
+    cart.value = []
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const addToCart = (item) => {
   // Если в корзине нет выбранного товара, добавляем в корзину товар, иначе удаляем
-  if (!item.isAdded) {
-    cart.value.push(item)
+  item.isAdded = !item.isAdded
+  if (item.isAdded) {
+    const obj = {
+      ...item,
+      sum: item.price,
+      count: 1,
+    }
+    console.log(obj)
+    cart.value.push(obj)
   } else {
     cart.value.splice(cart.value.indexOf(item), 1)
   }
-  item.isAdded = !item.isAdded
-  console.log(cart)
 }
 
 const addToFavorite = async (item) => {
@@ -155,7 +197,7 @@ onMounted(async () => {
 
 // Фильтрация
 watch(filters, fetchItems)
-provide('cart', { cart })
+provide('cart', { cart, addToCart })
 </script>
 
 <style scoped></style>

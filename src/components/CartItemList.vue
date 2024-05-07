@@ -8,6 +8,7 @@
     :image-url="item.imageUrl"
     :size="item.size"
     :color="item.color"
+    @onClickRemove="() => addToCart(item)"
   />
 </template>
 
@@ -15,5 +16,5 @@
 import { inject } from 'vue'
 import CartItem from './CartItem.vue'
 
-const { cart } = inject('cart')
+const { cart, addToCart } = inject('cart')
 </script>

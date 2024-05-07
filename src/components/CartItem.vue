@@ -22,12 +22,17 @@
       />
     </div>
     <p class="cart__text cart__price">{{ sum }} ₽</p>
-    <div class="cart__button cart__delete-button">Удалить товар</div>
+    <div
+      class="cart__button cart__delete-button"
+      @click="emit('onClickRemove')"
+    >
+      Удалить товар
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 const props = defineProps({
   imageUrl: String,
   title: String,
@@ -38,12 +43,11 @@ const props = defineProps({
   sum: Number,
 })
 
+const emit = defineEmits(['onClickRemove'])
 const count = ref(1)
-const sum = ref(count.value * props.price)
 
 const onClickPlus = () => {
   count.value++
-  getSum()
 }
 
 const onClcikMinus = () => {
@@ -51,12 +55,9 @@ const onClcikMinus = () => {
   if (count.value < 1) {
     count.value = 1
   }
-  getSum()
 }
 
-const getSum = () => {
-  sum.value = count.value * props.price
-}
+const sum = computed(() => count.value * props.price)
 </script>
 
 <style scoped>

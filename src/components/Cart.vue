@@ -26,30 +26,24 @@
         <div class="cart__footer-line"></div>
         <span class="cart__footer-value">700 ₽</span>
       </div>
-      <div class="cart__footer-content">
-        <span>Скидка</span>
-        <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">7 ₽</span>
-      </div>
-      <div class="cart__footer-content">
-        <span>Доставка</span>
-        <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">70 ₽</span>
-      </div>
       <div class="cart__footer-content cart__footer-content--result">
         <span>Итого</span>
         <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">7000 ₽</span>
+        <span class="cart__footer-value">{{ totalPrice }} ₽</span>
       </div>
 
-      <div class="cart__button">применить</div>
+      <div class="cart__button" @click="() => emit('createOrder')">Оформить заказ</div>
     </div>
   </div>
 </template>
 
 <script setup>
 import CartItemList from './CartItemList.vue'
-const emit = defineEmits(['closeCart'])
+const emit = defineEmits(['closeCart', 'createOrder'])
+
+defineProps({
+  totalPrice: Number,
+})
 </script>
 
 <style scoped>
