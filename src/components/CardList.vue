@@ -23,7 +23,7 @@
       :isAdded="item.isAdded"
       :isFavorite="item.isFavorite"
       :imageUrl="item.imageUrl"
-      :onClcikAdd="onClcikAdd"
+      :onClcikAdd="() => emit('addToCart', item)"
       :onClickFavorite="() => emit('addToFavorite', item)"
     />
   </div>
@@ -36,16 +36,13 @@
     items: Array,
   });
 
-  const emit = defineEmits(["selectEvent", "addToFavorite"]);
+  const emit = defineEmits(["selectEvent", "addToFavorite", "addToCart"]);
 
   // Выбор фильтрации по цене
   const onChangeSelect = (event) => {
     emit("selectEvent", event.target.value);
   };
 
-  const onClcikAdd = () => {
-    console.log("добавление в корзину");
-  };
 </script>
 
 <style scoped>

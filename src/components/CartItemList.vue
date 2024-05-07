@@ -1,9 +1,19 @@
 <!-- @format -->
+<template>
+  <CartItem
+    v-for="item in cart"
+    :key="item.id"
+    :title="item.title"
+    :price="item.price"
+    :image-url="item.imageUrl"
+    :size="item.size"
+    :color="item.color"
+  />
+</template>
 
 <script setup>
-import CartItem from './CartItem.vue';
-</script>
+import { inject } from 'vue'
+import CartItem from './CartItem.vue'
 
-<template>
-  <CartItem />
-</template>
+const { cart } = inject('cart')
+</script>

@@ -30,7 +30,7 @@
                 placeholder="Поиск..."
                 @input="onChangeSearchInput"
               />
-              <!-- // v-if="switcher" // :class="visible" // -->
+
               <img
                 class="header__profile-item--icon"
                 src="/public/icons/search.svg"
@@ -57,6 +57,7 @@
                 class="header__profile-item--icon"
                 src="/public/icons/bag.svg"
                 alt="Bag"
+                @click="() => emit('openCart')"
               />
             </li>
           </ul>
@@ -81,7 +82,7 @@
 import { ref } from 'vue'
 const switcher = ref(false)
 
-const emit = defineEmits(['searchEvent'])
+const emit = defineEmits(['searchEvent', 'openCart'])
 const onChangeSearchInput = (event) => {
   emit('searchEvent', event.target.value)
 }

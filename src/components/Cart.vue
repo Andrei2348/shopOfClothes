@@ -1,7 +1,10 @@
 <!-- @format -->
 
 <template>
-  <h2 class="cart__title">Корзина</h2>
+  <div class="cart__title-wrapper">
+    <h2 class="cart__title">Корзина</h2>
+    <div class="cart__button" @click="() => emit('closeCart')">На главную</div>
+  </div>
   <div class="cart__header">
     <ul class="cart__header-items">
       <li class="cart__header-item">Фото</li>
@@ -39,23 +42,28 @@
         <span class="cart__footer-value">7000 ₽</span>
       </div>
 
-      <div class="card__button">применить</div>
+      <div class="cart__button">применить</div>
     </div>
   </div>
 </template>
 
 <script setup>
-import CartItemList from './CartItemList.vue';
+import CartItemList from './CartItemList.vue'
+const emit = defineEmits(['closeCart'])
 </script>
 
 <style scoped>
-.cart__title {
+.cart__title-wrapper {
   margin-top: 240px;
+  margin-bottom: 70px;
   /* ======= */
+  position: relative;
+}
+.cart__title {
   color: #1d1d1d;
   font-size: 38px;
   font-weight: 600;
-  line-height: 38px;
+  line-height: 48px;
   margin-bottom: 32px;
 }
 .cart__header-items {
@@ -63,6 +71,7 @@ import CartItemList from './CartItemList.vue';
   grid-template-columns: repeat(6, 1fr);
   border-bottom: 1px solid #dededb;
   padding-bottom: 30px;
+  grid-column-gap: 30px;
 }
 .cart__header-item {
   font-size: 14px;
@@ -70,7 +79,7 @@ import CartItemList from './CartItemList.vue';
   line-height: 1;
   text-transform: uppercase;
   color: #1d1d1d;
-  text-align: center;
+  text-align: left;
 }
 .cart__footer-content {
   display: flex;
@@ -104,7 +113,7 @@ import CartItemList from './CartItemList.vue';
   border-bottom: 1px dotted #565656;
   flex: 1 0;
 }
-.card__button {
+.cart__button {
   display: inline-block;
   background-color: #565656;
   padding: 18px 38px 16px;
