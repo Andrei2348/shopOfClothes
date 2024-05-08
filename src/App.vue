@@ -14,6 +14,9 @@
         @closeCart="closeCart"
         @createOrder="createOrder"
         :totalPrice="totalPrice"
+        :totalCount="totalCount"
+        :discount="discount"
+        :totalSum="totalSum"
       />
     </div>
   </main>
@@ -39,14 +42,12 @@ import Cart from './components/Cart.vue'
 
 const items = ref([])
 const cart = ref([])
+const discount = 10
 // Реактивность для объекта
 const filters = reactive({
   sortBy: 'title',
   searchQuery: '',
 })
-
-// const sortBy = ref('')
-// const searchQuery = ref('')
 
 const cartOpen = ref(false)
 
@@ -59,21 +60,36 @@ const openCart = () => {
 const closeCart = () => {
   cartOpen.value = false
 }
+// Работа с корзиной (стоимость и количество товаров)
+const onClickPlus = (item) => {
+  item.count++
+  getSum(item)
+}
 
+const onClcikMinus = (item) => {
+  item.count--
+  if (item.count < 1) {
+    item.count = 1
+  }
+  getSum(item)
+}
+
+function getSum(item) {
+  console.log('get sum')
+  item.sum = item.count * item.price
+}
 // Функция вычисления итоговой стоимости
-// Добавить в поля бд count и sum
 const totalPrice = computed(() =>
-  cart.value.reduce((acc, item) => acc + item.price, 0)
+  cart.value.reduce((acc, item) => acc + item.sum, 0)
 )
 
-// const totalPrice = computed(() =>
-//   cart.value.reduce((acc, item) => acc + item.sum, 0)
-// )
-
-// const totalCount = computed(() =>
-//   cart.value.reduce((acc, item) => acc + item.count, 1)
-// )
-
+// Функция вычисления итогового количества
+const totalCount = computed(() =>
+  cart.value.reduce((acc, item) => acc + item.count, 0)
+)
+const totalSum = computed(
+  () => totalPrice.value - (totalPrice.value * discount) / 100
+)
 // Функция сортировки
 const onChangeSelect = (data) => {
   filters.sortBy = data
@@ -197,7 +213,7 @@ onMounted(async () => {
 
 // Фильтрация
 watch(filters, fetchItems)
-provide('cart', { cart, addToCart })
+provide('cart', { cart, addToCart, onClickPlus, onClcikMinus })
 </script>
 
 <style scoped></style>

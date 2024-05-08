@@ -30,48 +30,47 @@
 </template>
 
 <script setup>
-  import Card from "./Card.vue";
+import Card from './Card.vue'
 
-  defineProps({
-    items: Array,
-  });
+defineProps({
+  items: Array,
+})
 
-  const emit = defineEmits(["selectEvent", "addToFavorite", "addToCart"]);
+const emit = defineEmits(['selectEvent', 'addToFavorite', 'addToCart'])
 
-  // Выбор фильтрации по цене
-  const onChangeSelect = (event) => {
-    emit("selectEvent", event.target.value);
-  };
-
+// Выбор фильтрации по цене
+const onChangeSelect = (event) => {
+  emit('selectEvent', event.target.value)
+}
 </script>
 
 <style scoped>
-  .cards__title {
-    /* ======= */
-    color: #1d1d1d;
-    font-size: 38px;
-    font-weight: 600;
-    line-height: 38px;
-  }
-  .cards__wrapper {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 30px;
-  }
-  .cards__header-wrapper {
-    margin-top: 240px;
-    margin-bottom: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .cards__select {
-    padding: 10px 16px;
-    font-size: 14px;
-    color: #565656;
-    outline: none;
-    border: 1px solid #565656;
-    border-radius: 3px;
-    background-color: #fff;
-  }
+.cards__title {
+  /* ======= */
+  color: #1d1d1d;
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 38px;
+}
+.cards__wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 30px;
+}
+.cards__header-wrapper {
+  margin-top: 240px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cards__select {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #565656;
+  outline: none;
+  border: 1px solid #565656;
+  border-radius: 3px;
+  background-color: #fff;
+}
 </style>

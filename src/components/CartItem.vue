@@ -11,14 +11,14 @@
         class="cart__count-button"
         src="/public/icons/vector_left.svg"
         alt="left button"
-        @click="onClcikMinus"
+        @click="emit('onClcikMinus')"
       />
       <p class="cart__text cart__price">{{ count }}</p>
       <img
         class="cart__count-button"
         src="/public/icons/vector_right.svg"
         alt="left button"
-        @click="onClickPlus"
+        @click="emit('onClickPlus')"
       />
     </div>
     <p class="cart__text cart__price">{{ sum }} ₽</p>
@@ -32,32 +32,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
 const props = defineProps({
   imageUrl: String,
   title: String,
   color: String,
   size: String,
   price: Number,
-  count: Number,
   sum: Number,
+  count: Number,
 })
 
-const emit = defineEmits(['onClickRemove'])
-const count = ref(1)
-
-const onClickPlus = () => {
-  count.value++
-}
-
-const onClcikMinus = () => {
-  count.value--
-  if (count.value < 1) {
-    count.value = 1
-  }
-}
-
-const sum = computed(() => count.value * props.price)
+const emit = defineEmits(['onClickRemove', 'onClickPlus', 'onClcikMinus'])
 </script>
 
 <style scoped>

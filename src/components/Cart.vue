@@ -19,20 +19,27 @@
       <div class="cart__footer-content">
         <span>Количество</span>
         <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">7</span>
+        <span class="cart__footer-value">{{ totalCount }}</span>
       </div>
       <div class="cart__footer-content">
         <span>Стоимость</span>
         <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">700 ₽</span>
+        <span class="cart__footer-value">{{ totalPrice }} ₽</span>
+      </div>
+      <div class="cart__footer-content">
+        <span>Скидка</span>
+        <div class="cart__footer-line"></div>
+        <span class="cart__footer-value">{{ discount }} %</span>
       </div>
       <div class="cart__footer-content cart__footer-content--result">
         <span>Итого</span>
         <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">{{ totalPrice }} ₽</span>
+        <span class="cart__footer-value">{{ totalSum }} ₽</span>
       </div>
 
-      <div class="cart__button" @click="() => emit('createOrder')">Оформить заказ</div>
+      <div class="cart__button" @click="() => emit('createOrder')">
+        Оформить заказ
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +50,9 @@ const emit = defineEmits(['closeCart', 'createOrder'])
 
 defineProps({
   totalPrice: Number,
+  totalCount: Number,
+  totalSum: Number,
+  discount: Number,
 })
 </script>
 
