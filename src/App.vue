@@ -17,6 +17,7 @@
         :totalCount="totalCount"
         :discount="discount"
         :totalSum="totalSum"
+        :disabledButton="cartButtonDisabled"
       />
     </div>
   </main>
@@ -29,20 +30,10 @@ import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
 import Cart from './components/Cart.vue'
 
-// const count = ref(0);
-
-// function increment() {
-//   count.value++;
-//   console.log(count);
-// }
-
-// function updateCount(event) {
-//   count.value = Number(event.target.value);
-// }
-
 const items = ref([])
 const cart = ref([])
-const discount = 10
+const isCreatingOrder = ref(false)
+
 // Реактивность для объекта
 const filters = reactive({
   sortBy: 'title',
@@ -50,6 +41,7 @@ const filters = reactive({
 })
 
 const cartOpen = ref(false)
+const discount = 10
 
 // Функция открытия корзины
 const openCart = () => {
@@ -60,6 +52,7 @@ const openCart = () => {
 const closeCart = () => {
   cartOpen.value = false
 }
+
 // Работа с корзиной (стоимость и количество товаров)
 const onClickPlus = (item) => {
   item.count++
@@ -75,9 +68,9 @@ const onClcikMinus = (item) => {
 }
 
 function getSum(item) {
-  console.log('get sum')
   item.sum = item.count * item.price
 }
+
 // Функция вычисления итоговой стоимости
 const totalPrice = computed(() =>
   cart.value.reduce((acc, item) => acc + item.sum, 0)
@@ -87,9 +80,18 @@ const totalPrice = computed(() =>
 const totalCount = computed(() =>
   cart.value.reduce((acc, item) => acc + item.count, 0)
 )
+
+// Функция вычисления итоговой суммы с учетом скидки
 const totalSum = computed(
   () => totalPrice.value - (totalPrice.value * discount) / 100
 )
+
+// Отключение кнопки оформления закааза при отправке заказа или если корзина пустая
+const cartIsEmpty = computed(() => cart.value.length === 0)
+const cartButtonDisabled = computed(
+  () => isCreatingOrder.value || cartIsEmpty.valeu
+)
+
 // Функция сортировки
 const onChangeSelect = (data) => {
   filters.sortBy = data
@@ -101,12 +103,13 @@ const onChangeSearchInput = (data) => {
 // ============ Orders ===============
 const createOrder = async () => {
   try {
+    isCreatingOrder.value = true
     const { data } = await axios.post(
       `https://78f27ce1435ab43d.mokky.dev/orders`,
       {
         items: cart.value,
-        // totalCount: totalCount.value,
-        totalPrice: totalPrice.value,
+        totalCount: totalCount.value,
+        totalSum: totalSum.value,
       }
     )
     // При оформлении заказа очищаем корзину
@@ -114,6 +117,8 @@ const createOrder = async () => {
     return data
   } catch (error) {
     console.log(error)
+  } finally {
+    isCreatingOrder.value = false
   }
 }
 
@@ -126,7 +131,6 @@ const addToCart = (item) => {
       sum: item.price,
       count: 1,
     }
-    console.log(obj)
     cart.value.push(obj)
   } else {
     cart.value.splice(cart.value.indexOf(item), 1)
@@ -213,6 +217,15 @@ onMounted(async () => {
 
 // Фильтрация
 watch(filters, fetchItems)
+
+// Если корзина меняется:
+watch(cart, () => {
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: false
+  }))
+})
+
 provide('cart', { cart, addToCart, onClickPlus, onClcikMinus })
 </script>
 

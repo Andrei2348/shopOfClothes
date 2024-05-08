@@ -37,9 +37,13 @@
         <span class="cart__footer-value">{{ totalSum }} ₽</span>
       </div>
 
-      <div class="cart__button" @click="() => emit('createOrder')">
+      <button
+        class="cart__button"
+        @click="() => emit('createOrder')"
+        :disabled="disabledButton"
+      >
         Оформить заказ
-      </div>
+      </button>
     </div>
   </div>
 </template>
@@ -53,7 +57,9 @@ defineProps({
   totalCount: Number,
   totalSum: Number,
   discount: Number,
+  disabledButton: Boolean,
 })
+
 </script>
 
 <style scoped>
@@ -121,6 +127,7 @@ defineProps({
   display: inline-block;
   background-color: #565656;
   padding: 18px 38px 16px;
+  border: none;
   border-radius: 50px;
   color: #ffffff;
   font-size: 14px;
