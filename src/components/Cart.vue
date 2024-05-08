@@ -19,7 +19,7 @@
       <div class="cart__footer-content">
         <span>Количество</span>
         <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">{{ totalCount }}</span>
+        <span class="cart__footer-value">{{ totalCount }} товаров</span>
       </div>
       <div class="cart__footer-content">
         <span>Стоимость</span>
