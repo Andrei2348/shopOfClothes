@@ -7,7 +7,7 @@
       :totalCount="totalCount"
     />
     <div class="container">
-      <router-view></router-view>
+      <RouterView />
       <Cart
         v-if="cartOpen"
         @closeCart="closeCart"
@@ -52,7 +52,7 @@ const onClickPlus = (item) => {
   getSum(item)
 }
 
-const onClcikMinus = (item) => {
+const onClickMinus = (item) => {
   item.count--
   if (item.count < 1) {
     item.count = 1
@@ -125,7 +125,7 @@ const addToCart = (item) => {
   }
 }
 
-provide('cart', { cart, addToCart, onClickPlus, onClcikMinus })
+provide('cart', { cart, addToCart, onClickPlus, onClickMinus })
 </script>
 
 <style scoped></style>

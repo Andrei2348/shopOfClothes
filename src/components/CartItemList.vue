@@ -13,7 +13,7 @@
       :count="item.count"
       @onClickRemove="() => addToCart(item)"
       @onClickPlus="() => onClickPlus(item)"
-      @onClcikMinus="() => onClcikMinus(item)"
+      @onClcikMinus="() => onClickMinus(item)"
     />
 
   </div>
@@ -23,5 +23,5 @@
 import { inject } from 'vue'
 import CartItem from './CartItem.vue'
 
-const { cart, addToCart, onClickPlus, onClcikMinus } = inject('cart')
+const { cart, addToCart, onClickPlus, onClickMinus } = inject('cart')
 </script>
