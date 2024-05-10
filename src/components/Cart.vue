@@ -5,7 +5,7 @@
     <h2 class="cart__title">Корзина</h2>
     <div class="cart__button" @click="() => emit('closeCart')">На главную</div>
   </div>
-  <div class="cart__header">
+  <div class="cart__header" v-if="totalCount !== 0">
     <ul class="cart__header-items">
       <li class="cart__header-item">Фото</li>
       <li class="cart__header-item">Цвет</li>
@@ -46,10 +46,12 @@
       </button>
     </div>
   </div>
+  <CartInfo v-else/>
 </template>
 
 <script setup>
 import CartItemList from './CartItemList.vue'
+import CartInfo from './CartInfo.vue'
 const emit = defineEmits(['closeCart', 'createOrder'])
 
 defineProps({
@@ -59,7 +61,6 @@ defineProps({
   discount: Number,
   disabledButton: Boolean,
 })
-
 </script>
 
 <style scoped>

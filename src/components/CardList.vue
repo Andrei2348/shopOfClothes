@@ -46,7 +46,6 @@ const onChangeSelect = (event) => {
 
 <style scoped>
 .cards__title {
-  /* ======= */
   color: #1d1d1d;
   font-size: 38px;
   font-weight: 600;
