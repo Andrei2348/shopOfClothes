@@ -7,12 +7,7 @@
       :totalCount="totalCount"
     />
     <div class="container">
-      <CardList
-        :items="items"
-        @selectEvent="onChangeSelect"
-        @addToFavorite="addToFavorite"
-        @addToCart="addToCart"
-      />
+      <router-view></router-view>
       <Cart
         v-if="cartOpen"
         @closeCart="closeCart"
@@ -28,21 +23,15 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref, reactive, watch, provide } from 'vue'
+import { computed, ref, provide } from 'vue'
 import axios from 'axios'
 import Header from './components/Header.vue'
-import CardList from './components/CardList.vue'
+
+
 import Cart from './components/Cart.vue'
 
-const items = ref([])
 const cart = ref([])
 const isCreatingOrder = ref(false)
-
-// Реактивность для объекта
-const filters = reactive({
-  sortBy: 'title',
-  searchQuery: '',
-})
 
 const cartOpen = ref(false)
 const discount = 10
@@ -96,11 +85,6 @@ const cartButtonDisabled = computed(
   () => isCreatingOrder.value || cartIsEmpty.value
 )
 
-// Функция сортировки
-const onChangeSelect = (data) => {
-  filters.sortBy = data
-}
-
 const onChangeSearchInput = (data) => {
   filters.searchQuery = data
 }
@@ -140,101 +124,6 @@ const addToCart = (item) => {
     cart.value.splice(cart.value.indexOf(item), 1)
   }
 }
-
-const addToFavorite = async (item) => {
-  try {
-    item.isFavorite = !item.isFavorite
-    // Если в isFavorite присвоено true, заносим в бд, иначе удаляем из бд
-    if (item.isFavorite) {
-      const obj = {
-        parentId: item.id,
-      }
-      const { data } = await axios.post(
-        `https://78f27ce1435ab43d.mokky.dev/favorites`,
-        obj
-      )
-      item.favoriteId = data.id
-    } else {
-      await axios.delete(
-        `https://78f27ce1435ab43d.mokky.dev/favorites/${item.favoriteId}`
-      )
-      item.favoriteId = null
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-// Изменение списка товаров с учетом выбранных закладок
-const fetchFavorites = async () => {
-  try {
-    const { data: favorites } = await axios.get(
-      `https://78f27ce1435ab43d.mokky.dev/favorites`
-    )
-    items.value = items.value.map((item) => {
-      const favorite = favorites.find(
-        (favorite) => favorite.parentId === item.id
-      )
-      if (!favorite) {
-        return item
-      }
-      const objective = {
-        ...item,
-        isFavorite: true,
-        favoriteId: favorite.id,
-      }
-      return objective
-    })
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-const fetchItems = async () => {
-  try {
-    const params = {
-      sortBy: filters.sortBy,
-    }
-    if (filters.searchQuery) {
-      params.title = `*${filters.searchQuery}*`
-    }
-    const { data } = await axios.get(
-      `https://78f27ce1435ab43d.mokky.dev/items`,
-      { params }
-    )
-    // Для всех товаров назначаем значения:
-    items.value = data.map((obj) => ({
-      ...obj,
-      isFavorite: false,
-      favoriteId: null,
-      isAdded: false,
-    }))
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-onMounted(async () => {
-  await fetchItems()
-  await fetchFavorites()
-})
-
-// Фильтрация
-watch(filters, fetchItems)
-
-// Если корзина меняется:
-watch(
-  cart,
-  () => {
-    items.value = items.value.map((item) => ({
-      ...item,
-      isAdded: false,
-    }))
-  },
-  // {
-  //   deep: true,
-  // }
-)
 
 provide('cart', { cart, addToCart, onClickPlus, onClcikMinus })
 </script>

@@ -12,7 +12,7 @@
       </option>
     </select>
   </div>
-  <div class="cards__wrapper">
+  <div ref="parent" class="cards__wrapper">
     <Card
       v-for="item in items"
       :id="item.id"
@@ -31,11 +31,13 @@
 
 <script setup>
 import Card from './Card.vue'
+import { useAutoAnimate } from '@formkit/auto-animate/vue'
 
 defineProps({
   items: Array,
 })
 
+const [parent] = useAutoAnimate()
 const emit = defineEmits(['selectEvent', 'addToFavorite', 'addToCart'])
 
 // Выбор фильтрации по цене
