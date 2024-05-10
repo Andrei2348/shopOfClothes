@@ -59,6 +59,9 @@
                 alt="Bag"
                 @click="() => emit('openCart')"
               />
+              <span class="header__profile-item--info" v-if="totalCount > 0">{{
+                totalCount
+              }}</span>
             </li>
           </ul>
         </div>
@@ -81,13 +84,15 @@
 <script setup>
 import { ref } from 'vue'
 const switcher = ref(false)
+defineProps({
+  totalCount: Number,
+})
 
 const emit = defineEmits(['searchEvent', 'openCart'])
 const onChangeSearchInput = (event) => {
   emit('searchEvent', event.target.value)
 }
 const showSearchInput = () => {
-  console.log('switch')
   switcher.value = !switcher.value
 }
 </script>
@@ -133,6 +138,7 @@ const showSearchInput = () => {
   color: #fff;
   text-transform: uppercase;
   padding: 29px 34px;
+  position: relative;
 }
 .header__content {
   display: flex;
@@ -192,5 +198,21 @@ const showSearchInput = () => {
   padding-bottom: 6px;
   opacity: 1;
   visibility: visible;
+}
+.header__profile-item--info {
+  background-color: #ed1331;
+  padding: 3px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  right: -8px;
+  bottom: -7px;
 }
 </style>

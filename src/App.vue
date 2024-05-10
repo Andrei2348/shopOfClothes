@@ -1,7 +1,11 @@
 <!-- @format -->
 <template>
   <main class="main">
-    <Header @searchEvent="onChangeSearchInput" @openCart="openCart" />
+    <Header
+      @searchEvent="onChangeSearchInput"
+      @openCart="openCart"
+      :totalCount="totalCount"
+    />
     <div class="container">
       <CardList
         :items="items"
@@ -89,7 +93,7 @@ const totalSum = computed(
 // Отключение кнопки оформления закааза при отправке заказа или если корзина пустая
 const cartIsEmpty = computed(() => cart.value.length === 0)
 const cartButtonDisabled = computed(
-  () => isCreatingOrder.value || cartIsEmpty.valeu
+  () => isCreatingOrder.value || cartIsEmpty.value
 )
 
 // Функция сортировки
@@ -219,12 +223,18 @@ onMounted(async () => {
 watch(filters, fetchItems)
 
 // Если корзина меняется:
-watch(cart, () => {
-  items.value = items.value.map((item) => ({
-    ...item,
-    isAdded: false
-  }))
-})
+watch(
+  cart,
+  () => {
+    items.value = items.value.map((item) => ({
+      ...item,
+      isAdded: false,
+    }))
+  },
+  // {
+  //   deep: true,
+  // }
+)
 
 provide('cart', { cart, addToCart, onClickPlus, onClcikMinus })
 </script>
