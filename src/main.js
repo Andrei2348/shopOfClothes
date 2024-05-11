@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-
+import store from './store/index.js'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import Home from './components/home/Home.vue'
 import Favorites from './components/favorites/Favorites.vue'
@@ -22,4 +22,5 @@ const router = createRouter({
 
 app.use(autoAnimatePlugin)
 app.use(router)
+app.use(store)
 app.mount('#app')

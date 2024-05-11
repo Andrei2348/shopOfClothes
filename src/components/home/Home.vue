@@ -11,6 +11,8 @@
 import CardList from './CardList.vue'
 import axios from 'axios'
 import { reactive, ref, inject, watch, onMounted } from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
 
 const { cart, addToCart } = inject('cart')
 
@@ -33,6 +35,7 @@ const addToFavorite = async (item) => {
     if (item.isFavorite) {
       const obj = {
         parentId: item.id,
+        ...item,
       }
       const { data } = await axios.post(
         `https://78f27ce1435ab43d.mokky.dev/favorites`,
@@ -63,12 +66,12 @@ const fetchFavorites = async () => {
       if (!favorite) {
         return item
       }
-      const objective = {
+      const favorObj = {
         ...item,
         isFavorite: true,
         favoriteId: favorite.id,
       }
-      return objective
+      return favorObj
     })
   } catch (error) {
     console.log(error)
@@ -87,7 +90,7 @@ const fetchItems = async () => {
       `https://78f27ce1435ab43d.mokky.dev/items`,
       { params }
     )
-    // Для всех товаров назначаем значения:
+    // Для всех товаров присваиваем значения:
     items.value = data.map((obj) => ({
       ...obj,
       isFavorite: false,
@@ -99,8 +102,25 @@ const fetchItems = async () => {
   }
 }
 
+const getAllCards = async () => {
+  // Достаем данные из локальной корзины (Если имеются)
+  const localCart = localStorage.getItem('cart')
+  cart.value = localCart ? JSON.parse(localCart) : []
+
+  // Получаем списки товаров
+  await fetchItems()
+  await fetchFavorites()
+
+  // Отмечаем товары из списка товаров, которые уже имеются в корзине
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: cart.value.some((cartItem) => cartItem.id === item.id),
+  }))
+  storeMem()
+}
+
 // Фильтрация
-watch(filters, fetchItems)
+watch(filters, getAllCards)
 
 // Если корзина меняется:
 watch(cart, () => {
@@ -119,19 +139,15 @@ watch(
   { deep: true }
 )
 
-onMounted(async () => {
-  // Достаем данные из локальной корзины (Если имеются)
-  const localCart = localStorage.getItem('cart')
-  cart.value = localCart ? JSON.parse(localCart) : []
+onMounted(getAllCards)
 
-  // Получаем списки товаров
-  await fetchItems()
-  await fetchFavorites()
+// VUEX хранилище
+const storeMem = () => {
+  // console.log(items.value)
+  store.commit('setCards', items.value)
 
-  // Отмечаем товары из списка товаров, которые уже имеются в корзине
-  items.value = items.value.map((item) => ({
-    ...item,
-    isAdded: cart.value.some((cartItem) => cartItem.id === item.id),
-  }))
-})
+  // ----------------------------
+  // console.log(store.state.cards[0])
+  // ----------------------------
+}
 </script>
