@@ -1,50 +1,22 @@
 <!-- @format -->
 <template>
   <main class="main">
-    <Header
-      @searchEvent="onChangeSearchInput"
-      @openCart="openCart"
-      :totalCount="totalCount"
-    />
+    <Header @searchEvent="onChangeSearchInput" :totalCount="totalCount" />
     <div class="container">
       <RouterView />
-      <Cart
-        v-if="cartOpen"
-        @closeCart="closeCart"
-        @createOrder="createOrder"
-        :totalPrice="totalPrice"
-        :totalCount="totalCount"
-        :discount="discount"
-        :totalSum="totalSum"
-        :disabledButton="cartButtonDisabled"
-      />
     </div>
   </main>
 </template>
 
 <script setup>
-import { computed, ref, provide } from 'vue'
+import { computed, ref, provide, onMounted } from 'vue'
 import axios from 'axios'
 import Header from './components/header/Header.vue'
-import Cart from './components/cart/Cart.vue'
 
 const cart = ref([])
-const isCreatingOrder = ref(false)
-
-const cartOpen = ref(false)
 const discount = 10
 
-// Функция открытия корзины
-const openCart = () => {
-  cartOpen.value = true
-}
-
-// Функция закрытия корзины
-const closeCart = () => {
-  cartOpen.value = false
-}
-
-// Работа с корзиной (стоимость и количество товаров)
+// Работа с корзиной (подсчет стоимости и количества товаров)
 const onClickPlus = (item) => {
   item.count++
   getSum(item)
@@ -77,19 +49,12 @@ const totalSum = computed(
   () => totalPrice.value - (totalPrice.value * discount) / 100
 )
 
-// Отключение кнопки оформления закааза при отправке заказа или если корзина пустая
-const cartIsEmpty = computed(() => cart.value.length === 0)
-const cartButtonDisabled = computed(
-  () => isCreatingOrder.value || cartIsEmpty.value
-)
-
 const onChangeSearchInput = (data) => {
   filters.searchQuery = data
 }
 // ============ Orders ===============
 const createOrder = async () => {
   try {
-    isCreatingOrder.value = true
     const { data } = await axios.post(
       `https://78f27ce1435ab43d.mokky.dev/orders`,
       {
@@ -98,13 +63,12 @@ const createOrder = async () => {
         totalSum: totalSum.value,
       }
     )
-    // При оформлении заказа очищаем корзину
+    // При оформлении заказа очищаем корзину и локальное хранилище корзины
     cart.value = []
+    localStorage.setItem('cart', JSON.stringify([]))
     return data
   } catch (error) {
     console.log(error)
-  } finally {
-    isCreatingOrder.value = false
   }
 }
 
@@ -121,9 +85,26 @@ const addToCart = (item) => {
   } else {
     cart.value.splice(cart.value.indexOf(item), 1)
   }
+  localStorage.setItem('cart', JSON.stringify(cart.value))
 }
 
-provide('cart', { cart, addToCart, onClickPlus, onClickMinus })
+onMounted(async () => {
+  // Достаем данные из локальной корзины (Если имеются)
+  const localCart = localStorage.getItem('cart')
+  cart.value = localCart ? JSON.parse(localCart) : []
+})
+
+provide('cart', {
+  cart,
+  addToCart,
+  onClickPlus,
+  onClickMinus,
+  createOrder,
+  totalPrice,
+  totalCount,
+  discount,
+  totalSum,
+})
 </script>
 
 <style scoped></style>

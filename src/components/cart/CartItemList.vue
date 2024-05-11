@@ -15,7 +15,6 @@
       @onClickPlus="() => onClickPlus(item)"
       @onClcikMinus="() => onClickMinus(item)"
     />
-
   </div>
 </template>
 

@@ -1,7 +1,5 @@
 <!-- @format -->
-
 <script setup></script>
-
 <template>
   <header class="header">
     <div class="header__title">
@@ -32,7 +30,6 @@
                 placeholder="Поиск..."
                 @input="onChangeSearchInput"
               />
-
               <img
                 class="header__profile-item--icon"
                 src="/public/icons/search.svg"
@@ -57,15 +54,19 @@
               </router-link>
             </li>
             <li class="header__profile-item">
-              <img
-                class="header__profile-item--icon"
-                src="/public/icons/bag.svg"
-                alt="Bag"
-                @click="() => emit('openCart')"
-              />
-              <span class="header__profile-item--info" v-if="totalCount > 0">{{
-                totalCount
-              }}</span>
+              <router-link to="/cart">
+                <img
+                  class="header__profile-item--icon"
+                  src="/public/icons/bag.svg"
+                  alt="Bag"
+                  @click="() => emit('openCart')"
+                />
+                <span
+                  class="header__profile-item--info"
+                  v-if="totalCount > 0"
+                  >{{ totalCount }}</span
+                >
+              </router-link>
             </li>
           </ul>
         </div>

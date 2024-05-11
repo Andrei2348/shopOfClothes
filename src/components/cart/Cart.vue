@@ -1,9 +1,10 @@
 <!-- @format -->
-
 <template>
   <div class="cart__title-wrapper">
     <h2 class="cart__title">Корзина</h2>
-    <div class="cart__button" @click="() => emit('closeCart')">На главную</div>
+    <router-link to="/">
+      <div class="cart__button">На главную</div>
+    </router-link>
   </div>
   <div class="cart__header" v-if="totalCount !== 0">
     <ul class="cart__header-items">
@@ -37,30 +38,20 @@
         <span class="cart__footer-value">{{ totalSum }} ₽</span>
       </div>
 
-      <button
-        class="cart__button"
-        @click="() => emit('createOrder')"
-        :disabled="disabledButton"
-      >
+      <button class="cart__button" @click="() => createOrder()">
         Оформить заказ
       </button>
     </div>
   </div>
-  <CartInfo v-else/>
+  <CartInfo v-else />
 </template>
 
 <script setup>
+import { inject } from 'vue'
 import CartItemList from './CartItemList.vue'
 import CartInfo from './CartInfo.vue'
-const emit = defineEmits(['closeCart', 'createOrder'])
-
-defineProps({
-  totalPrice: Number,
-  totalCount: Number,
-  totalSum: Number,
-  discount: Number,
-  disabledButton: Boolean,
-})
+const { createOrder, totalPrice, totalCount, totalSum, discount } =
+  inject('cart')
 </script>
 
 <style scoped>

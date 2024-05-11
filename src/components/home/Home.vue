@@ -14,7 +14,6 @@ import { reactive, ref, inject, watch, onMounted } from 'vue'
 
 const { cart, addToCart } = inject('cart')
 
-// Реактивность для объекта
 const filters = reactive({
   sortBy: 'title',
   searchQuery: '',
