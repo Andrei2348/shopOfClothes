@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import CardList from '../components/CardList.vue'
+import CardList from './CardList.vue'
 import axios from 'axios'
 import { reactive, ref, inject, watch, onMounted } from 'vue'
 

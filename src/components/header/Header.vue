@@ -14,7 +14,9 @@
     <div class="header__wrapper">
       <div class="container">
         <div class="header__content">
-          <img class="header__logo" src="/public/icons/logo.svg" alt="" />
+          <router-link to="/">
+            <img class="header__logo" src="/public/icons/logo.svg" alt="" />
+          </router-link>
           <ul class="header__menu-items">
             <li class="header__menu-item">Sale</li>
             <li class="header__menu-item">Женщинам</li>
@@ -46,11 +48,13 @@
               />
             </li>
             <li class="header__profile-item">
-              <img
-                class="header__profile-item--icon"
-                src="/public/icons/heart.svg"
-                alt="Heart"
-              />
+              <router-link to="/favorites">
+                <img
+                  class="header__profile-item--icon"
+                  src="/public/icons/heart.svg"
+                  alt="Heart"
+                />
+              </router-link>
             </li>
             <li class="header__profile-item">
               <img

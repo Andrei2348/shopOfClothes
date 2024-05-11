@@ -4,8 +4,8 @@ import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
-import Home from './pages/Home.vue'
-import Favorites from './pages/Favorites.vue'
+import Home from './components/home/Home.vue'
+import Favorites from './components/favorites/Favorites.vue'
 
 const app = createApp(App)
 const routes = [

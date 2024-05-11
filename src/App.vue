@@ -25,10 +25,8 @@
 <script setup>
 import { computed, ref, provide } from 'vue'
 import axios from 'axios'
-import Header from './components/Header.vue'
-
-
-import Cart from './components/Cart.vue'
+import Header from './components/header/Header.vue'
+import Cart from './components/cart/Cart.vue'
 
 const cart = ref([])
 const isCreatingOrder = ref(false)
