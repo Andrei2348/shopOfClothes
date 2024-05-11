@@ -5,7 +5,7 @@
 
 <script setup>
 import axios from 'axios'
-import { onMounted, ref, inject } from 'vue'
+import { onMounted, ref } from 'vue'
 import CardList from '../home/CardList.vue'
 
 const favorites = ref([])

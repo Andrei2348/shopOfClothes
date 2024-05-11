@@ -1,5 +1,4 @@
 <!-- @format -->
-
 <template>
   <div class="cart__wrapper">
     <img class="cart__image" :src="imageUrl" :alt="title" />
@@ -32,7 +31,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   imageUrl: String,
   title: String,
   color: String,
