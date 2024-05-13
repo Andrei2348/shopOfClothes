@@ -1,7 +1,7 @@
 <template>
   <CardList
     :items="items"
-    @selectEvent="onChangeSelect"
+    @onChangeSelect="onChangeSelect"
     @addToFavorite="addToFavorite"
     @addToCart="addToCart"
   />

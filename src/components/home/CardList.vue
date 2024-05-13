@@ -2,15 +2,7 @@
 <template>
   <div class="cards__header-wrapper">
     <h2 class="cards__title">Каталог товаров</h2>
-    <select class="cards__select" @change="onChangeSelect">
-      <option class="cards__select-option" value="name">По названию</option>
-      <option class="cards__select-option" value="price">
-        По цене (дешевые)
-      </option>
-      <option class="cards__select-option" value="-price">
-        По цене (дорогие)
-      </option>
-    </select>
+    <FilterSelector @onChangeSelect="onChangeSelect" />
   </div>
   <div ref="parent" class="cards__wrapper">
     <Card
@@ -32,18 +24,16 @@
 <script setup>
 import Card from './Card.vue'
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
+import FilterSelector from '../UI/FilterSelector.vue'
 
 defineProps({
   items: Array,
 })
 
 const [parent] = useAutoAnimate()
-const emit = defineEmits(['selectEvent', 'addToFavorite', 'addToCart'])
+const emit = defineEmits(['onChangeSelect', 'addToFavorite', 'addToCart'])
 
-// Выбор фильтрации по цене
-const onChangeSelect = (event) => {
-  emit('selectEvent', event.target.value)
-}
+
 </script>
 
 <style scoped>
