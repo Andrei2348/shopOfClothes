@@ -10,9 +10,9 @@ import Cart from './components/cart/Cart.vue'
 
 const app = createApp(App)
 const routes = [
-  { path: '/', name: 'home', component: Home },
-  { path: '/favorites', name: 'favorites', component: Favorites },
-  { path: '/cart', name: 'cart', component: Cart },
+  { path: '/', name: 'home', component: Home, props: true },
+  { path: '/favorites', name: 'favorites', component: Favorites, props: true },
+  { path: '/cart', name: 'cart', component: Cart, props: true },
 ]
 
 const router = createRouter({

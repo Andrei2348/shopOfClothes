@@ -1,7 +1,10 @@
 <!-- @format -->
 <template>
   <main class="main">
-    <Header @searchEvent="onChangeSearchInput" :totalCount="totalCount" />
+    <Header
+      @searchEvent="onChangeSearchInput"
+      :totalCount="totalCount"
+    />
     <div class="container">
       <RouterView />
     </div>
@@ -9,11 +12,14 @@
 </template>
 
 <script setup>
-import { computed, ref, provide, onMounted } from 'vue'
+import { computed, ref, reactive, provide, onMounted } from 'vue'
 import axios from 'axios'
 import Header from './components/header/Header.vue'
 
 const cart = ref([])
+const search = reactive({
+  data: '',
+})
 const discount = 10
 
 // Работа с корзиной (подсчет стоимости и количества товаров)
@@ -50,8 +56,9 @@ const totalSum = computed(
 )
 
 const onChangeSearchInput = (data) => {
-  filters.searchQuery = data
+  search.data = data
 }
+
 // ============ Orders ===============
 const createOrder = async () => {
   try {
@@ -105,6 +112,5 @@ provide('cart', {
   discount,
   totalSum,
 })
+provide('search', search)
 </script>
-
-<style scoped></style>

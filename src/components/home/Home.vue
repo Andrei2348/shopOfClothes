@@ -1,18 +1,21 @@
+<!-- @format -->
+
 <template>
+  <MainStartPage />
   <CardList
     :items="items"
-    @onChangeSelect="onChangeSelect"
+    pageTitle="Каталог товаров"
     @addToFavorite="addToFavorite"
     @addToCart="addToCart"
+    @onChangeSelect="onChangeSelect"
   />
 </template>
 
 <script setup>
-import CardList from './CardList.vue'
 import axios from 'axios'
 import { reactive, ref, inject, watch, onMounted } from 'vue'
-import { useStore } from 'vuex'
-const store = useStore()
+import CardList from './CardList.vue'
+import MainStartPage from '../main/MainStartPage.vue'
 
 const { cart, addToCart } = inject('cart')
 
@@ -22,6 +25,12 @@ const filters = reactive({
 })
 
 const items = ref([])
+
+// Поиск товара
+const searchData = inject('search')
+watch(searchData, (searchValue) => {
+  filters.searchQuery = searchValue.data
+})
 
 // Функция сортировки
 const onChangeSelect = (data) => {
@@ -116,7 +125,6 @@ const getAllCards = async () => {
     ...item,
     isAdded: cart.value.some((cartItem) => cartItem.id === item.id),
   }))
-  storeMem()
 }
 
 // Фильтрация
@@ -140,14 +148,4 @@ watch(
 )
 
 onMounted(getAllCards)
-
-// VUEX хранилище
-const storeMem = () => {
-  // console.log(items.value)
-  store.commit('setCards', items.value)
-
-  // ----------------------------
-  // console.log(store.state.cards[0])
-  // ----------------------------
-}
 </script>

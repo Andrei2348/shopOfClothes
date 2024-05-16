@@ -1,8 +1,8 @@
 <!-- @format -->
 <template>
   <div class="cards__header-wrapper">
-    <h2 class="cards__title">Каталог товаров</h2>
-    <FilterSelector @onChangeSelect="onChangeSelect" />
+    <h2 class="cards__title">{{ pageTitle }}</h2>
+    <FilterSelector @onChangeSelect="(data) => emit('onChangeSelect', data)" />
   </div>
   <div ref="parent" class="cards__wrapper">
     <Card
@@ -22,18 +22,16 @@
 </template>
 
 <script setup>
-import Card from './Card.vue'
-import { useAutoAnimate } from '@formkit/auto-animate/vue'
-import FilterSelector from '../UI/FilterSelector.vue'
+import Card from './Card.vue';
+import { useAutoAnimate } from '@formkit/auto-animate/vue';
+import FilterSelector from '../UI/FilterSelector.vue';
 
+const [parent] = useAutoAnimate();
+const emit = defineEmits(['onChangeSelect', 'addToFavorite', 'addToCart']);
 defineProps({
   items: Array,
-})
-
-const [parent] = useAutoAnimate()
-const emit = defineEmits(['onChangeSelect', 'addToFavorite', 'addToCart'])
-
-
+  pageTitle: String
+});
 </script>
 
 <style scoped>
