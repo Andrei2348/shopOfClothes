@@ -19,6 +19,7 @@
     <span v-for="err in v$.name.$errors" :key="err.$uid">{{
       err.$message
     }}</span>
+    name
     <input type="text" v-model.trim="v$.name.$model" /><br /><br />
     <span v-for="err in v$.password.$errors" :key="err.$uid">{{
       err.$message
@@ -49,7 +50,13 @@
       const rules = computed(() => ({
         email: { email, required, minLength: minLength(3) },
         name: { required, minLength: minLength(4) },
-        password: { required, minLength: minLength(6), hasNumber, hasLowerCaseLetter, hasCapitalCaseLetter},
+        password: {
+          required,
+          hasNumber,
+          minLength: minLength(6),
+          hasLowerCaseLetter,
+          hasCapitalCaseLetter,
+        },
       }));
 
       const v$ = useVuelidate(rules, auth);
