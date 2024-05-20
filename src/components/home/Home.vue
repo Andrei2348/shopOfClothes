@@ -1,7 +1,6 @@
 <!-- @format -->
 
 <template>
-  <Modal />
   <MainStartPage />
   <CardList
     :items="items"
@@ -17,7 +16,6 @@ import axios from 'axios'
 import { reactive, ref, inject, watch, onMounted } from 'vue'
 import CardList from './CardList.vue'
 import MainStartPage from '../main/MainStartPage.vue'
-import Modal from '../modals/Modal.vue'
 const { cart, addToCart } = inject('cart')
 
 const filters = reactive({

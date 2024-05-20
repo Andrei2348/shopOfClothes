@@ -1,8 +1,10 @@
 <!-- @format -->
 <template>
   <main class="main">
+    <Modal v-if="isModalOpen" @openModal="openModal" />
     <Header
       @searchEvent="onChangeSearchInput"
+      @openModal="openModal"
       :totalCount="totalCount"
     />
     <div class="container">
@@ -12,9 +14,10 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive, provide, onMounted } from 'vue'
+import { computed, ref, reactive, provide, onMounted, watch } from 'vue'
 import axios from 'axios'
 import Header from './components/header/Header.vue'
+import Modal from './components/modals/Modal.vue'
 
 const cart = ref([])
 const search = reactive({
@@ -58,6 +61,21 @@ const totalSum = computed(
 const onChangeSearchInput = (data) => {
   search.data = data
 }
+
+// ============ Модальные окна ============
+const isModalOpen = ref(false)
+const isScrollDisabled = ref(false)
+
+const openModal = () => {
+  console.log('open')
+  isModalOpen.value = !isModalOpen.value
+  isScrollDisabled.value = !isScrollDisabled.value
+}
+
+// Запрет прокрутки
+// watch(isScrollDisabled, () => {
+//   document.body.style.overflow = value ? 'hidden' : ''
+// })
 
 // ============ Orders ===============
 const createOrder = async () => {

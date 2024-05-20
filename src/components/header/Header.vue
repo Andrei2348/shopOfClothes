@@ -36,7 +36,7 @@
                 @click="showSearchInput"
               />
             </li>
-            <li class="header__profile-item">
+            <li class="header__profile-item" @click="() => emit('openModal')">
               <img
                 class="header__profile-item--icon"
                 src="/public/icons/user.svg"
@@ -88,13 +88,14 @@ import InfoCount from '../UI/InfoCount.vue'
 const switcher = ref(false)
 defineProps({
   totalCount: Number,
-  totalFavorCount: Number
+  totalFavorCount: Number,
 })
 
-const emit = defineEmits(['searchEvent', 'openCart'])
+const emit = defineEmits(['searchEvent', 'openCart', 'openModal'])
 const onChangeSearchInput = (event) => {
   emit('searchEvent', event.target.value)
 }
+
 const showSearchInput = () => {
   switcher.value = !switcher.value
 }
