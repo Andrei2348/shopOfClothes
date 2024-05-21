@@ -13,12 +13,14 @@
         v-model.trim="v$.email.$model"
         placeholder="Введите ваш e-mail"
       />
-      <span
-        class="modal__input-error"
-        v-for="err in v$.email.$errors"
-        :key="err.$uid"
-        >{{ err.$message }}</span
-      >
+      <div class="modal__input-errors--wrapper" v-if="v$.email.$error">
+        <span
+          class="modal__input-error"
+          v-for="err in v$.email.$errors"
+          :key="err.$uid"
+          >{{ err.$message }}</span
+        >
+      </div>
     </div>
 
     <div class="modal__login-input--wrapper">
@@ -31,17 +33,18 @@
         id="password__input"
         v-model="v$.password.$model"
         placeholder="Введите ваш пароль"
+        :class="{
+          active: v$.password.$error,
+        }"
       />
-      <!-- <span
-        class="modal__input-error"
-        v-for="err in v$.password.$errors"
-        :key="err.$uid"
-        >{{ err.$message }}</span
-      > -->
-      <p v-if="!v$.password.minLength">Длина</p>
-      <p v-if="!v$.password.hasNumber">Цифры</p>
-      <p v-if="!v$.password.hasLowerCaseLetter">Нижний регистр</p>
-      <p v-if="!v$.password.hasCapitalCaseLetter">Верхний регистр</p>
+      <div class="modal__input-errors--wrapper" v-if="v$.password.$error">
+        <span
+          class="modal__input-error"
+          v-for="err in v$.password.$errors"
+          :key="err.$uid"
+          >{{ err.$message }}</span
+        >
+      </div>
     </div>
     <button
       class="modal__button-submit"
@@ -54,7 +57,7 @@
   </form>
 </template>
 
-<script>
+<script setup>
 import { reactive, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { email, required, minLength, helpers } from '@vuelidate/validators'
@@ -62,56 +65,40 @@ import {
   hasNumber,
   hasLowerCaseLetter,
   hasCapitalCaseLetter,
-} from '../../validators/password.js'
+} from '../../validators/validators.js'
 
-export default {
-  setup() {
-    const auth = reactive({
-      email: '',
-      password: '',
-    })
+const auth = reactive({
+  email: '',
+  password: '',
+})
 
-    const rules = computed(() => ({
-      email: {
-        email: helpers.withMessage('Неверный формат ввода пароля', email),
-        required: helpers.withMessage(
-          'Это поле не может быть пустым',
-          required
-        ),
-      },
-      password: {
-        required: helpers.withMessage(
-          'Это поле не может быть пустым',
-          required
-        ),
-        minLength: helpers.withMessage(
-          () => `Длина пароля должна быть не меньше 8 символов`,
-          minLength(8)
-        ),
-        hasNumber,
-        hasLowerCaseLetter,
-        hasCapitalCaseLetter,
-      },
-    }))
-
-    const v$ = useVuelidate(rules, auth)
-    const formValid = computed(() => v$.value.$invalid)
-
-    const submitForm = async () => {
-      const result = await v$.value.$validate()
-      
-      if (result) {
-        console.log(result)
-        console.log({ ...auth })
-      }
-    }
-    return {
-      auth,
-      v$,
-      submitForm,
-      formValid,
-    }
+const rules = computed(() => ({
+  email: {
+    email: helpers.withMessage('Неверный формат ввода пароля', email),
+    required: helpers.withMessage('Это поле не может быть пустым', required),
   },
+  password: {
+    required: helpers.withMessage('Это поле не может быть пустым', required),
+    minLength: helpers.withMessage(
+      () => `Длина пароля должна быть не меньше 8 символов`,
+      minLength(8)
+    ),
+    hasNumber,
+    hasLowerCaseLetter,
+    hasCapitalCaseLetter,
+  },
+}))
+
+const v$ = useVuelidate(rules, auth)
+const formValid = computed(() => v$.value.$invalid)
+
+const submitForm = async () => {
+  const result = await v$.value.$validate()
+
+  if (result) {
+    console.log(result)
+    console.log({ ...auth })
+  }
 }
 </script>
 <style scoped>
@@ -134,6 +121,9 @@ export default {
   border-radius: 50px;
   width: 100%;
 }
+.modal__input.active {
+  border: 1px solid #b12121;
+}
 .modal__input::placeholder {
   color: #b6b6b6;
   font-size: 18px;
@@ -153,12 +143,30 @@ export default {
   letter-spacing: 4.5%;
   margin-bottom: 10px;
 }
+.modal__input-errors--wrapper {
+  position: absolute;
+  right: -310px;
+  top: 50px;
+  width: 300px;
+  background-color: #eeeded;
+  padding: 16px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.modal__input-errors--wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px;
+  border: 10px solid transparent;
+  border-top: 7px solid #eeeded;
+}
 .modal__input-error {
   font-size: 18px;
   color: #1d1d1d;
-  position: absolute;
-  left: 0;
-  bottom: 0;
+  display: block;
+  margin-bottom: 5px;
 }
 .modal__button-submit {
   background-color: #565656;
