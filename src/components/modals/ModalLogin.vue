@@ -54,6 +54,13 @@
     >
       Войти
     </button>
+
+    <div class="modal__register">
+        <p class="modal__register-text">Не зарегестрированы?</p>
+        <a class="modal__register-link" @click.prevent="switchToRegister">
+          Создайте аккаунт!
+        </a>
+      </div>
   </form>
 </template>
 
@@ -185,5 +192,27 @@ const submitForm = async () => {
 .modal__button-submit:disabled {
   background-color: #b6b6b6;
   cursor: default;
+}
+.modal__register{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.modal__register-text{
+  color: #1d1d1d;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 4.5%;
+  margin-right: 10px;
+
+}
+.modal__register-link{
+  color: #130a47;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 4.5%;
+  cursor: pointer;
 }
 </style>
