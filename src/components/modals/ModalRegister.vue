@@ -217,20 +217,21 @@ export default {
       }
 
 
-      return {
-        phoneValue,
-        phoneMask,
-        formValid,
-        submitForm,
-        onAccept,
-        onComplete,
-        isNumber,
-        emit,
-        email,
-        v$
-      }
     }
-  },
+    return {
+    
+      
+      formValid,
+      submitForm,
+      onAccept,
+      onComplete,
+      isNumber,
+      emit,
+      email,
+      v$,
+      auth
+    }
+  }
 }
 
 // directives: {
