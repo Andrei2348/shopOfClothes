@@ -27,18 +27,17 @@
       <label class="modal__input-label" for="phone__input"
         >Введите ваш номер телефона</label
       >
-      <!-- @accept="onAccept"
-      @complete="onComplete"
-      @keypress="isNumber" -->
-      <!-- v-imask="phoneNumberMask" -->
       <input
+        @accept="onAccept"
+        @complete="onComplete"
+        @keypress="isNumber"
         v-imask="phoneMask"
-        v-model="phoneValue"
+        v-model="v$.phone.$model"
         class="modal__input"
         type="text"
         id="phone__input"
         v-model.trim="v$.phone.$model"
-        placeholder="Введите ваш номер телефона"
+        placeholder="375-(00)-000-00-00"
       />
       <div class="modal__input-errors--wrapper" v-if="v$.phone.$error">
         <span
@@ -118,7 +117,7 @@
 </template>
 
 <script>
-import { reactive, computed, defineEmits } from 'vue'
+import { reactive, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { IMaskDirective } from 'vue-imask'
 import {
@@ -134,13 +133,13 @@ import {
   hasCapitalCaseLetter,
 } from '../../validators/validators.js'
 
+
 export default {
+  emits: ['switchToLogin'],
   directives: {
     imask: IMaskDirective,
   },
-  setup() {
-    const emit = defineEmits(['switchToLogin'])
-
+  setup(props, { emit }) {
     const auth = reactive({
       email: '',
       phone: '',
@@ -148,8 +147,8 @@ export default {
       repassword: '',
     })
 
-    phoneMask: {
-      mask: '+{7}(000)000-00-00'
+    const phoneMask = {
+      mask: '+375-(00)-000-00-00'
     }
     const onAccept = (e) => {
       const maskRef = e.detail
@@ -210,38 +209,27 @@ export default {
 
     const submitForm = async () => {
       const result = await v$.value.$validate()
-
       if (result) {
         console.log(result)
         console.log({ ...auth })
       }
-
-
     }
     return {
-    
-      
+      rules,
       formValid,
       submitForm,
+      v$,
+      auth,
       onAccept,
       onComplete,
       isNumber,
-      emit,
-      email,
-      v$,
-      auth
+      phoneMask,
+      emit
     }
   }
 }
-
-// directives: {
-//     'imask': IMaskDirective,
-// }
-
-// phoneNumberMask: {
-//   mask: '+(375)(00)(000-00-00)'
-// }
 </script>
+
 <style scoped>
 .modal__form-title {
   font-size: 32px;

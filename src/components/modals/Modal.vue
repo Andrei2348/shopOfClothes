@@ -1,5 +1,4 @@
 <template>
-  <!-- @click.stop -->
   <div class="modal__layer" @click="() => emit('openModal')">
     <div class="modal__form-wrapper" @click.stop>
       <div class="modal__close-button" @click="() => emit('openModal')">
