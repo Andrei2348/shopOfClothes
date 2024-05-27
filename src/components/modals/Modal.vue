@@ -39,13 +39,13 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
-import ModalLogin from './ModalLogin.vue'
-import ModalRegister from './ModalRegister.vue'
+import { ref } from "vue";
+import ModalLogin from "./ModalLogin.vue";
+import ModalRegister from "./ModalRegister.vue";
 
-const switcher = ref('login')
+const switcher = ref("login");
 
-const emit = defineEmits(['openModal'])
+const emit = defineEmits(["openModal"]);
 </script>
 
 <style scoped>

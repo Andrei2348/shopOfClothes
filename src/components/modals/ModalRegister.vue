@@ -117,76 +117,75 @@
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
-import { useVuelidate } from '@vuelidate/core'
-import { IMaskDirective } from 'vue-imask'
+import { reactive, computed } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { IMaskDirective } from "vue-imask";
 import {
   email,
   required,
   minLength,
   sameAs,
   helpers,
-} from '@vuelidate/validators'
+} from "@vuelidate/validators";
 import {
   hasNumber,
   hasLowerCaseLetter,
   hasCapitalCaseLetter,
-} from '../../validators/validators.js'
-
+} from "../../validators/validators.js";
 
 export default {
-  emits: ['switchToLogin'],
+  emits: ["switchToLogin"],
   directives: {
     imask: IMaskDirective,
   },
   setup(props, { emit }) {
     const auth = reactive({
-      email: '',
-      phone: '',
-      password: '',
-      repassword: '',
-    })
+      email: "",
+      phone: "",
+      password: "",
+      repassword: "",
+    });
 
     const phoneMask = {
-      mask: '+375-(00)-000-00-00'
-    }
+      mask: "+375-(00)-000-00-00",
+    };
     const onAccept = (e) => {
-      const maskRef = e.detail
-      auth.phone = maskRef.value
-    }
+      const maskRef = e.detail;
+      auth.phone = maskRef.value;
+    };
     const onComplete = (e) => {
-      const maskRef = e.detail
-      userPhone = maskRef.unmaskedValue
-    }
+      const maskRef = e.detail;
+      userPhone = maskRef.unmaskedValue;
+    };
     const isNumber = (e) => {
-      let regex = /[0-9]/
+      let regex = /[0-9]/;
       if (!regex.test(e.key)) {
-        e.returnValue = false
-        if (e.preventDefault) e.preventDefault()
+        e.returnValue = false;
+        if (e.preventDefault) e.preventDefault();
       }
-    }
+    };
 
     const rules = computed(() => ({
       email: {
-        email: helpers.withMessage('Неверный формат ввода пароля!', email),
+        email: helpers.withMessage("Неверный формат ввода пароля!", email),
         required: helpers.withMessage(
-          'Это поле не может быть пустым!',
+          "Это поле не может быть пустым!",
           required
         ),
       },
       phone: {
         required: helpers.withMessage(
-          'Это поле не может быть пустым!',
+          "Это поле не может быть пустым!",
           required
         ),
       },
       password: {
         required: helpers.withMessage(
-          'Это поле не может быть пустым!',
+          "Это поле не может быть пустым!",
           required
         ),
         minLength: helpers.withMessage(
-          () => 'Длина пароля должна быть не меньше 8 символов!',
+          () => "Длина пароля должна быть не меньше 8 символов!",
           minLength(8)
         ),
         hasNumber,
@@ -195,25 +194,25 @@ export default {
       },
       repassword: {
         required: helpers.withMessage(
-          'Это поле не может быть пустым!',
+          "Это поле не может быть пустым!",
           required
         ),
         sameAs: helpers.withMessage(
-          'Пароли не совпадают!',
+          "Пароли не совпадают!",
           sameAs(auth.password)
         ),
       },
-    }))
-    const v$ = useVuelidate(rules, auth)
-    const formValid = computed(() => v$.value.$invalid)
+    }));
+    const v$ = useVuelidate(rules, auth);
+    const formValid = computed(() => v$.value.$invalid);
 
     const submitForm = async () => {
-      const result = await v$.value.$validate()
+      const result = await v$.value.$validate();
       if (result) {
-        console.log(result)
-        console.log({ ...auth })
+        console.log(result);
+        console.log({ ...auth });
       }
-    }
+    };
     return {
       rules,
       formValid,
@@ -224,10 +223,10 @@ export default {
       onComplete,
       isNumber,
       phoneMask,
-      emit
-    }
-  }
-}
+      emit,
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -284,7 +283,7 @@ export default {
   border-bottom-right-radius: 10px;
 }
 .modal__input-errors--wrapper::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -10px;
