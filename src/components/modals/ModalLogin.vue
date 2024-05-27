@@ -24,7 +24,7 @@
     </div>
 
     <div class="modal__login-input--wrapper">
-      <label class="modal__input-label" for="email__input"
+      <label class="modal__input-label" for="password__input"
         >Введите ваш пароль</label
       >
       <input
@@ -56,11 +56,14 @@
     </button>
 
     <div class="modal__register">
-        <p class="modal__register-text">Не зарегестрированы?</p>
-        <a class="modal__register-link" @click.prevent="switchToRegister">
-          Создайте аккаунт!
-        </a>
-      </div>
+      <p class="modal__register-text">Не зарегестрированы?</p>
+      <a
+        class="modal__register-link"
+        @click.prevent="() => emit('switchToRegister')"
+      >
+        Создайте аккаунт!
+      </a>
+    </div>
   </form>
 </template>
 
@@ -68,11 +71,8 @@
 import { reactive, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { email, required, minLength, helpers } from '@vuelidate/validators'
-import {
-  hasNumber,
-  hasLowerCaseLetter,
-  hasCapitalCaseLetter,
-} from '../../validators/validators.js'
+
+const emit = defineEmits(['switchToRegister'])
 
 const auth = reactive({
   email: '',
@@ -86,13 +86,6 @@ const rules = computed(() => ({
   },
   password: {
     required: helpers.withMessage('Это поле не может быть пустым', required),
-    minLength: helpers.withMessage(
-      () => `Длина пароля должна быть не меньше 8 символов`,
-      minLength(8)
-    ),
-    hasNumber,
-    hasLowerCaseLetter,
-    hasCapitalCaseLetter,
   },
 }))
 
@@ -193,21 +186,20 @@ const submitForm = async () => {
   background-color: #b6b6b6;
   cursor: default;
 }
-.modal__register{
+.modal__register {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
-.modal__register-text{
+.modal__register-text {
   color: #1d1d1d;
   font-size: 14px;
   line-height: 18px;
   font-weight: 400;
   letter-spacing: 4.5%;
   margin-right: 10px;
-
 }
-.modal__register-link{
+.modal__register-link {
   color: #130a47;
   font-size: 14px;
   line-height: 18px;

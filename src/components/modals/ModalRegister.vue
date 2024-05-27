@@ -24,15 +24,21 @@
     </div>
 
     <div class="modal__login-input--wrapper">
-      <label class="modal__input-label" for="email__input"
+      <label class="modal__input-label" for="phone__input"
         >Введите ваш номер телефона</label
       >
+      <!-- @accept="onAccept"
+      @complete="onComplete"
+      @keypress="isNumber" -->
+      <!-- v-imask="phoneNumberMask" -->
       <input
+        v-imask="phoneMask"
+        v-model="phoneValue"
         class="modal__input"
         type="text"
-        id="email__input"
+        id="phone__input"
         v-model.trim="v$.phone.$model"
-        placeholder="Введите ваш e-mail"
+        placeholder="Введите ваш номер телефона"
       />
       <div class="modal__input-errors--wrapper" v-if="v$.phone.$error">
         <span
@@ -45,7 +51,7 @@
     </div>
 
     <div class="modal__login-input--wrapper">
-      <label class="modal__input-label" for="email__input"
+      <label class="modal__input-label" for="password__input"
         >Введите ваш пароль</label
       >
       <input
@@ -69,23 +75,23 @@
     </div>
 
     <div class="modal__login-input--wrapper">
-      <label class="modal__input-label" for="email__input"
+      <label class="modal__input-label" for="repassword__input"
         >Подтвердите ваш пароль</label
       >
       <input
         class="modal__input"
         type="password"
-        id="password__input"
-        v-model="v$.password.$model"
+        id="repassword__input"
+        v-model="v$.repassword.$model"
         placeholder="Введите ваш пароль"
         :class="{
-          active: v$.password.$error,
+          active: v$.repassword.$error,
         }"
       />
-      <div class="modal__input-errors--wrapper" v-if="v$.password.$error">
+      <div class="modal__input-errors--wrapper" v-if="v$.repassword.$error">
         <span
           class="modal__input-error"
-          v-for="err in v$.password.$errors"
+          v-for="err in v$.repassword.$errors"
           :key="err.$uid"
           >{{ err.$message }}</span
         >
@@ -99,11 +105,20 @@
     >
       Зарегистрироваться
     </button>
+    <div class="modal__register">
+      <p class="modal__register-text">Уже есть аккаунт?</p>
+      <a
+        class="modal__register-link"
+        @click.prevent="() => emit('switchToLogin')"
+      >
+        Войти!
+      </a>
+    </div>
   </form>
 </template>
 
-<script setup>
-import { reactive, computed } from 'vue'
+<script>
+import { reactive, computed, defineEmits } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { IMaskDirective } from 'vue-imask'
 import {
@@ -119,48 +134,112 @@ import {
   hasCapitalCaseLetter,
 } from '../../validators/validators.js'
 
-const auth = reactive({
-  email: '',
-  phone: '',
-  password: '',
-  repeatPassword: '',
-})
-
-const rules = computed(() => ({
-  email: {
-    email: helpers.withMessage('Неверный формат ввода пароля', email),
-    required: helpers.withMessage('Это поле не может быть пустым', required),
+export default {
+  directives: {
+    imask: IMaskDirective,
   },
-  phone: {
-    required,
-  },
-  password: {
-    required: helpers.withMessage('Это поле не может быть пустым', required),
-    minLength: helpers.withMessage(
-      () => `Длина пароля должна быть не меньше 8 символов`,
-      minLength(8)
-    ),
-    hasNumber,
-    hasLowerCaseLetter,
-    hasCapitalCaseLetter,
-  },
-  repeatPassword: {
-    required: helpers.withMessage('Это поле не может быть пустым', required),
-    sameAs: sameAs('password'),
-  },
-}))
+  setup() {
+    const emit = defineEmits(['switchToLogin'])
 
-const v$ = useVuelidate(rules, auth)
-const formValid = computed(() => v$.value.$invalid)
+    const auth = reactive({
+      email: '',
+      phone: '',
+      password: '',
+      repassword: '',
+    })
 
-const submitForm = async () => {
-  const result = await v$.value.$validate()
+    phoneMask: {
+      mask: '+{7}(000)000-00-00'
+    }
+    const onAccept = (e) => {
+      const maskRef = e.detail
+      auth.phone = maskRef.value
+    }
+    const onComplete = (e) => {
+      const maskRef = e.detail
+      userPhone = maskRef.unmaskedValue
+    }
+    const isNumber = (e) => {
+      let regex = /[0-9]/
+      if (!regex.test(e.key)) {
+        e.returnValue = false
+        if (e.preventDefault) e.preventDefault()
+      }
+    }
 
-  if (result) {
-    console.log(result)
-    console.log({ ...auth })
-  }
+    const rules = computed(() => ({
+      email: {
+        email: helpers.withMessage('Неверный формат ввода пароля!', email),
+        required: helpers.withMessage(
+          'Это поле не может быть пустым!',
+          required
+        ),
+      },
+      phone: {
+        required: helpers.withMessage(
+          'Это поле не может быть пустым!',
+          required
+        ),
+      },
+      password: {
+        required: helpers.withMessage(
+          'Это поле не может быть пустым!',
+          required
+        ),
+        minLength: helpers.withMessage(
+          () => 'Длина пароля должна быть не меньше 8 символов!',
+          minLength(8)
+        ),
+        hasNumber,
+        hasLowerCaseLetter,
+        hasCapitalCaseLetter,
+      },
+      repassword: {
+        required: helpers.withMessage(
+          'Это поле не может быть пустым!',
+          required
+        ),
+        sameAs: helpers.withMessage(
+          'Пароли не совпадают!',
+          sameAs(auth.password)
+        ),
+      },
+    }))
+    const v$ = useVuelidate(rules, auth)
+    const formValid = computed(() => v$.value.$invalid)
+
+    const submitForm = async () => {
+      const result = await v$.value.$validate()
+
+      if (result) {
+        console.log(result)
+        console.log({ ...auth })
+      }
+
+
+      return {
+        phoneValue,
+        phoneMask,
+        formValid,
+        submitForm,
+        onAccept,
+        onComplete,
+        isNumber,
+        emit,
+        email,
+        v$
+      }
+    }
+  },
 }
+
+// directives: {
+//     'imask': IMaskDirective,
+// }
+
+// phoneNumberMask: {
+//   mask: '+(375)(00)(000-00-00)'
+// }
 </script>
 <style scoped>
 .modal__form-title {
@@ -246,5 +325,26 @@ const submitForm = async () => {
 .modal__button-submit:disabled {
   background-color: #b6b6b6;
   cursor: default;
+}
+.modal__register {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.modal__register-text {
+  color: #1d1d1d;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 4.5%;
+  margin-right: 10px;
+}
+.modal__register-link {
+  color: #130a47;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 4.5%;
+  cursor: pointer;
 }
 </style>

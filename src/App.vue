@@ -1,7 +1,9 @@
 <!-- @format -->
 <template>
   <main class="main">
-    <Modal v-if="isModalOpen" @openModal="openModal" />
+    <transition name="modal">
+      <Modal v-if="isModalOpen" @openModal="openModal" />
+    </transition>
     <Header
       @searchEvent="onChangeSearchInput"
       @openModal="openModal"
@@ -14,7 +16,7 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive, provide, onMounted, watch } from 'vue'
+import { computed, ref, reactive, provide, onMounted } from 'vue'
 import axios from 'axios'
 import Header from './components/header/Header.vue'
 import Modal from './components/modals/Modal.vue'
@@ -67,7 +69,6 @@ const isModalOpen = ref(false)
 const isScrollDisabled = ref(false)
 
 const openModal = () => {
-  console.log('open')
   isModalOpen.value = !isModalOpen.value
   isScrollDisabled.value = !isScrollDisabled.value
 }
@@ -132,3 +133,16 @@ provide('cart', {
 })
 provide('search', search)
 </script>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.6s;
+}
+
+.modal-enter,
+.modal-leave-to {
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+</style>

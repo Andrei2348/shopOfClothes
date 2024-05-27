@@ -1,6 +1,7 @@
 <template>
-  <div class="modal__layer">
-    <div class="modal__form-wrapper">
+  <!-- @click.stop -->
+  <div class="modal__layer" @click="() => emit('openModal')">
+    <div class="modal__form-wrapper" @click.stop>
       <div class="modal__close-button" @click="() => emit('openModal')">
         <svg
           width="16"
@@ -25,12 +26,25 @@
           />
         </svg>
       </div>
-      <ModalLogin />
+
+      <ModalLogin
+        v-if="switcher === 'login'"
+        @switchToRegister="switcher = 'register'"
+      />
+
+      <ModalRegister
+        v-if="switcher === 'register'"
+        @switchToLogin="switcher = 'login'"
+      />
     </div>
   </div>
 </template>
 <script setup>
+import { ref } from 'vue'
 import ModalLogin from './ModalLogin.vue'
+import ModalRegister from './ModalRegister.vue'
+
+const switcher = ref('login')
 
 const emit = defineEmits(['openModal'])
 </script>
