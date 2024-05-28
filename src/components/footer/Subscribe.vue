@@ -83,4 +83,9 @@
 .subscribe__social-wrapper{
     display: flex;
 }
+.subscribe__form{
+    width: 550px;
+}
+
+
 </style>
