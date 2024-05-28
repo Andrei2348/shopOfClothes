@@ -31,7 +31,7 @@
         class="modal__input"
         type="password"
         id="password__input"
-        v-model="v$.password.$model"
+        v-model.trim="v$.password.$model"
         placeholder="Введите ваш пароль"
         :class="{
           active: v$.password.$error,

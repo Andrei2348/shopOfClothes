@@ -3,12 +3,29 @@
     <div class="container">
       <div class="suscribe__inner">
         <h3 class="subscribe__title">Скидка 10% на подписку</h3>
-        <form class="subscribe__form">
-          <input type="email" />
-          <button class="subscribe__button">Подписаться</button>
+        <form class="subscribe__form" @submit.prevent="subscribeForm">
+          <input
+            class="subscribe__input"
+            type="email"
+            placeholder="Ваш E-mail"
+            v-model.trim="v$.email.$model"
+          />
+          <button
+            class="subscribe__button"
+            onclick.prevent="subscribeForm"
+            type="submit"
+            :disabled="formValid"
+          >
+            Подписаться
+          </button>
         </form>
+        <div>
+          <span class="error" v-if="v$.email.$error">Опшипка</span>
+          {{ v$.email.$errors[0].$validator }}
+          <!-- <span class="error" v-if="v$.required.$error">Поле не может быть пустым</span> -->
+        </div>
         <ul class="subscribe__social-wrapper">
-          <li>
+          <li class="subscribe__social-item">
             <svg
               width="39"
               height="38"
@@ -24,7 +41,7 @@
               />
             </svg>
           </li>
-          <li>
+          <li class="subscribe__social-item">
             <svg
               width="39"
               height="38"
@@ -40,7 +57,7 @@
               />
             </svg>
           </li>
-          <li>
+          <li class="subscribe__social-item">
             <svg
               width="39"
               height="38"
@@ -67,25 +84,102 @@
     </div>
   </div>
 </template>
+<script setup>
+import { reactive, computed } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { email, required, helpers } from '@vuelidate/validators'
 
+const subscribe = reactive({
+  email: '',
+})
 
+const rules = computed(() => ({
+  email: {
+    email: helpers.withMessage('Неверный формат ввода пароля', email),
+    required: helpers.withMessage('Это поле не может быть пустым', required),
+  },
+}))
+
+const v$ = useVuelidate(rules, subscribe)
+const formValid = computed(() => v$.value.$invalid)
+
+const subscribeForm = async () => {
+  const result = await v$.value.$validate()
+
+  if (result) {
+    console.log(result)
+    console.log({ ...subscribe })
+    v$.value.email.$model = ''
+  }
+}
+</script>
 <style scoped>
-.subscribe__wrapper{
-    background-color: #FF4003;
-    padding-top: 66px;
-    padding-bottom: 66px;
+.subscribe__wrapper {
+  background-color: #ff4003;
+  padding-top: 66px;
+  padding-bottom: 66px;
 }
-.suscribe__inner{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.suscribe__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.subscribe__social-wrapper{
-    display: flex;
+.subscribe__social-wrapper {
+  display: flex;
+  gap: 20px;
+  margin-left: 30px;
 }
-.subscribe__form{
-    width: 550px;
+.subscribe__form {
+  width: 550px;
+  position: relative;
 }
-
-
+.subscribe__input {
+  height: 50px;
+  padding: 18px 196px 18px 30px;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 400;
+  color: #1d1d1d;
+  letter-spacing: 1.3px;
+}
+.subscribe__input:placeholder {
+  color: #565656;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 400;
+}
+.subscribe__button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 50px;
+  background: #1d1d1d;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 18px 49px;
+  cursor: pointer;
+}
+.subscribe__button:disabled {
+  background-color: #272727;
+  cursor: default;
+}
+.subscribe__title {
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 600;
+  color: #fff;
+  margin-right: 80px;
+}
+.subscribe__social-item {
+  cursor: pointer;
+  height: 38px;
+}
 </style>
