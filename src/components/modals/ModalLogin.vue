@@ -70,7 +70,7 @@
 <script setup>
 import { reactive, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { email, required, minLength, helpers } from '@vuelidate/validators'
+import { email, required, helpers } from '@vuelidate/validators'
 
 const emit = defineEmits(['switchToRegister'])
 

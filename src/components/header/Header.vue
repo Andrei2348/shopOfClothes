@@ -85,6 +85,9 @@
 <script setup>
 import { ref } from 'vue'
 import InfoCount from '../UI/InfoCount.vue'
+import debounce from 'lodash.debounce'
+
+
 const switcher = ref(false)
 defineProps({
   totalCount: Number,
@@ -92,9 +95,10 @@ defineProps({
 })
 
 const emit = defineEmits(['searchEvent', 'openCart', 'openModal'])
-const onChangeSearchInput = (event) => {
+
+const onChangeSearchInput = debounce((event) => {
   emit('searchEvent', event.target.value)
-}
+}, 800)
 
 const showSearchInput = () => {
   switcher.value = !switcher.value

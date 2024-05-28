@@ -13,6 +13,7 @@
       <RouterView />
     </div>
   </main>
+  <Footer />
 </template>
 
 <script setup>
@@ -20,6 +21,7 @@ import { computed, ref, reactive, provide, onMounted } from 'vue'
 import axios from 'axios'
 import Header from './components/header/Header.vue'
 import Modal from './components/modals/Modal.vue'
+import Footer from './components/footer/Footer.vue'
 
 const cart = ref([])
 const search = reactive({
