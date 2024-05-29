@@ -179,9 +179,9 @@ const subscribeForm = async () => {
   color: #fff;
   margin-right: 80px;
 }
-.subscribe__social-item {
+.subscribe__social-item svg {
   cursor: pointer;
-  height: 38px;
+  height: 39px;
 }
 .subscribe__error {
   position: absolute;

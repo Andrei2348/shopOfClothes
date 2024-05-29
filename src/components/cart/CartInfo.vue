@@ -16,6 +16,7 @@
 }
 .cartinfo__image {
   width: 200px;
+  height: 200px;
   margin: 0 auto 30px auto;
 }
 .cartinfo__title {

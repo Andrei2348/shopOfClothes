@@ -6,59 +6,73 @@
       <div class="cart__button">На главную</div>
     </router-link>
   </div>
-  <div class="cart__header" v-if="totalCount !== 0">
-    <ul class="cart__header-items">
-      <li class="cart__header-item">Фото</li>
-      <li class="cart__header-item">Цвет</li>
-      <li class="cart__header-item">Размер</li>
-      <li class="cart__header-item">Цена</li>
-      <li class="cart__header-item">Количество</li>
-      <li class="cart__header-item">Сумма</li>
-    </ul>
-    <CartItemList />
-    <div class="cart__footer">
-      <div class="cart__footer-content">
-        <span>Количество</span>
-        <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">{{ totalCount }} товаров</span>
-      </div>
-      <div class="cart__footer-content">
-        <span>Стоимость</span>
-        <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">{{ totalPrice }} ₽</span>
-      </div>
-      <div class="cart__footer-content">
-        <span>Скидка</span>
-        <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">{{ discount }} %</span>
-      </div>
-      <div class="cart__footer-content cart__footer-content--result">
-        <span>Итого</span>
-        <div class="cart__footer-line"></div>
-        <span class="cart__footer-value">{{ totalSum }} ₽</span>
-      </div>
-
-      <button class="cart__button" @click="() => createOrder()">
-        Оформить заказ
-      </button>
+  <div class="cart__wrapper">
+    <div class="cart__info" ref="parent">
+      <ClientInfo v-if="totalCount !== 0" />
+      <Delivery />
     </div>
+
+    <div class="cart__header" v-if="totalCount !== 0">
+      <ul class="cart__header-items">
+        <li class="cart__header-item">Фото</li>
+        <li class="cart__header-item">Цвет</li>
+        <li class="cart__header-item">Размер</li>
+        <li class="cart__header-item">Цена</li>
+        <li class="cart__header-item">Количество</li>
+        <li class="cart__header-item">Сумма</li>
+      </ul>
+      <CartItemList />
+      <div class="cart__footer">
+        <div class="cart__footer-content">
+          <span>Количество</span>
+          <div class="cart__footer-line"></div>
+          <span class="cart__footer-value">{{ totalCount }} товаров</span>
+        </div>
+        <div class="cart__footer-content">
+          <span>Стоимость</span>
+          <div class="cart__footer-line"></div>
+          <span class="cart__footer-value">{{ totalPrice }} ₽</span>
+        </div>
+        <div class="cart__footer-content">
+          <span>Скидка</span>
+          <div class="cart__footer-line"></div>
+          <span class="cart__footer-value">{{ discount }} %</span>
+        </div>
+        <div class="cart__footer-content cart__footer-content--result">
+          <span>Итого</span>
+          <div class="cart__footer-line"></div>
+          <span class="cart__footer-value">{{ totalSum }} ₽</span>
+        </div>
+
+        <button class="cart__button" @click="() => createOrder()">
+          Оформить заказ
+        </button>
+      </div>
+    </div>
+    <CartInfo v-else />
   </div>
-  <CartInfo v-else />
 </template>
 
 <script setup>
 import { inject } from 'vue'
+import { useAutoAnimate } from '@formkit/auto-animate/vue'
 import CartItemList from './CartItemList.vue'
 import CartInfo from './CartInfo.vue'
+import Delivery from './Delivery.vue'
+import ClientInfo from './ClientInfo.vue'
+
+const [parent] = useAutoAnimate()
 const { createOrder, totalPrice, totalCount, totalSum, discount } =
   inject('cart')
 </script>
 
 <style scoped>
+.cart__wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
 .cart__title-wrapper {
   margin-top: 240px;
-  margin-bottom: 70px;
-  /* ======= */
   position: relative;
 }
 .cart__title {
@@ -73,7 +87,7 @@ const { createOrder, totalPrice, totalCount, totalSum, discount } =
   grid-template-columns: repeat(6, 1fr);
   border-bottom: 1px solid #dededb;
   padding-bottom: 30px;
-  grid-column-gap: 30px;
+  grid-column-gap: 20px;
 }
 .cart__header-item {
   font-size: 14px;

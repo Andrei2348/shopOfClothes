@@ -51,7 +51,7 @@ const emit = defineEmits(['onClickRemove', 'onClickPlus', 'onClcikMinus'])
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   position: relative;
-  grid-column-gap: 30px;
+  grid-column-gap: 20px;
   border-bottom: 1px solid #dededb;
 }
 .cart__button {
