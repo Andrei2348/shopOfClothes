@@ -18,12 +18,15 @@
           >
             Подписаться
           </button>
+          <span
+            class="subscribe__error"
+            v-if="
+              v$.email.$errors[0] && v$.email.$errors[0].$validator === 'email'
+            "
+            >Неверный формат ввода email</span
+          >
         </form>
-        <div>
-          <span class="error" v-if="v$.email.$error">Опшипка</span>
-          {{ v$.email.$errors[0].$validator }}
-          <!-- <span class="error" v-if="v$.required.$error">Поле не может быть пустым</span> -->
-        </div>
+        <div></div>
         <ul class="subscribe__social-wrapper">
           <li class="subscribe__social-item">
             <svg
@@ -87,17 +90,14 @@
 <script setup>
 import { reactive, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { email, required, helpers } from '@vuelidate/validators'
+import { email, required } from '@vuelidate/validators'
 
 const subscribe = reactive({
   email: '',
 })
 
 const rules = computed(() => ({
-  email: {
-    email: helpers.withMessage('Неверный формат ввода пароля', email),
-    required: helpers.withMessage('Это поле не может быть пустым', required),
-  },
+  email: { email, required },
 }))
 
 const v$ = useVuelidate(rules, subscribe)
@@ -118,6 +118,7 @@ const subscribeForm = async () => {
   background-color: #ff4003;
   padding-top: 66px;
   padding-bottom: 66px;
+  margin-top: 143px;
 }
 .suscribe__inner {
   display: flex;
@@ -181,5 +182,14 @@ const subscribeForm = async () => {
 .subscribe__social-item {
   cursor: pointer;
   height: 38px;
+}
+.subscribe__error {
+  position: absolute;
+  left: 0;
+  bottom: -24px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 400;
 }
 </style>
