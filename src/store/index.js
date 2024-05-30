@@ -2,11 +2,11 @@ import { createStore } from 'vuex'
 
 const store = createStore({
   state: {
-    cards: [],
+    isLogin: false,
   },
   mutations: {
-    setCards(state, payload) {
-      state.cards = payload
+    setLogin(state, payload) {
+      state.isLogin = payload
     },
   },
 })

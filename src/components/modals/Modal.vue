@@ -29,23 +29,62 @@
       <ModalLogin
         v-if="switcher === 'login'"
         @switchToRegister="switcher = 'register'"
+        @loginUser="loginUser"
       />
 
       <ModalRegister
         v-if="switcher === 'register'"
         @switchToLogin="switcher = 'login'"
+        @registerUser="registerUser"
       />
+
+      <ModalAlert v-if="switcher === 'alert'" :message="message" />
     </div>
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
-import ModalLogin from "./ModalLogin.vue";
-import ModalRegister from "./ModalRegister.vue";
+import { ref } from 'vue'
+import axios from 'axios'
+import ModalLogin from './ModalLogin.vue'
+import ModalRegister from './ModalRegister.vue'
+import ModalAlert from './ModalAlert.vue'
+import messagesInfo from './mess.js'
+import { saveJWT } from './../secure/secure.js'
 
-const switcher = ref("login");
+const switcher = ref('login')
+const message = ref('')
+const emit = defineEmits(['openModal'])
 
-const emit = defineEmits(["openModal"]);
+const loginUser = async (result) => {
+  try {
+    const { data } = await axios.post(
+      'https://78f27ce1435ab43d.mokky.dev/auth',
+      result
+    )
+    console.log(data)
+    saveJWT(data.token)
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const registerUser = async (result) => {
+  switcher.value = 'alert'
+  try {
+    const { data } = await axios.post(
+      'https://78f27ce1435ab43d.mokky.dev/register',
+      JSON.stringify(result)
+    )
+    console.log(data.token)
+    message.value = messagesInfo[0]
+    saveJWT(data.token)
+    return data
+  } catch (error) {
+    message.value = messagesInfo[1]
+    console.log(error)
+  }
+}
 </script>
 
 <style scoped>

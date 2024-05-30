@@ -1,7 +1,7 @@
 <!-- @format -->
 <template>
   <h2 class="modal__form-title">Вход</h2>
-  <form @submit.prevent="submitForm" class="modal__form">
+  <form @submit.prevent="loginUser" class="modal__form">
     <div class="modal__login-input--wrapper">
       <label class="modal__input-label" for="email__input"
         >Введите ваш e-mail</label
@@ -50,7 +50,7 @@
       class="modal__button-submit"
       :disabled="formValid"
       type="submit"
-      onclick.prevent="submitForm"
+      onclick.prevent="loginUser"
     >
       Войти
     </button>
@@ -72,7 +72,7 @@ import { reactive, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { email, required, helpers } from '@vuelidate/validators'
 
-const emit = defineEmits(['switchToRegister'])
+const emit = defineEmits(['switchToRegister', 'loginUser'])
 
 const auth = reactive({
   email: '',
@@ -92,12 +92,9 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, auth)
 const formValid = computed(() => v$.value.$invalid)
 
-const submitForm = async () => {
-  const result = await v$.value.$validate()
-
-  if (result) {
-    console.log(result)
-    console.log({ ...auth })
+const loginUser = () => {
+  if (v$.value.$validate()) {
+    emit('loginUser', { ...auth })
   }
 }
 </script>

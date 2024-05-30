@@ -1,7 +1,7 @@
 <!-- @format -->
 <template>
   <h2 class="modal__form-title">Регистрация</h2>
-  <form @submit.prevent="submitForm" class="modal__form">
+  <form @submit.prevent="registerUser" class="modal__form">
     <div class="modal__login-input--wrapper">
       <label class="modal__input-label" for="email__input"
         >Введите ваш e-mail</label
@@ -100,7 +100,7 @@
       class="modal__button-submit"
       :disabled="formValid"
       type="submit"
-      onclick.prevent="submitForm"
+      onclick.prevent="registerUser"
     >
       Зарегистрироваться
     </button>
@@ -134,7 +134,7 @@ import {
 } from "../../validators/validators.js";
 
 export default {
-  emits: ["switchToLogin"],
+  emits: ["switchToLogin", "registerUser"],
   directives: {
     imask: IMaskDirective,
   },
@@ -206,17 +206,26 @@ export default {
     const v$ = useVuelidate(rules, auth);
     const formValid = computed(() => v$.value.$invalid);
 
-    const submitForm = async () => {
-      const result = await v$.value.$validate();
-      if (result) {
-        console.log(result);
-        console.log({ ...auth });
+    // const registerUser = async () => {
+    //   const result = await v$.value.$validate();
+    //   if (result) {
+    //     console.log(result);
+    //     console.log({ ...auth });
+    //   }
+    // };
+
+    const registerUser = () => {
+      if (v$.value.$validate()){
+        const result = {...auth};
+        delete result.repassword;
+        emit('registerUser', result)
       }
-    };
+    }
+    
     return {
       rules,
       formValid,
-      submitForm,
+      registerUser,
       v$,
       auth,
       onAccept,

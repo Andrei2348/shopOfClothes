@@ -17,12 +17,15 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive, provide, onMounted } from 'vue'
+import { computed, ref, reactive, provide, onMounted, watch } from 'vue'
 import axios from 'axios'
+import { useStore } from 'vuex'
 import Header from './components/header/Header.vue'
 import Modal from './components/modals/Modal.vue'
 import Footer from './components/footer/Footer.vue'
+import { checkCookie } from './components/secure/secure.js'
 
+const store = useStore()
 const cart = ref([])
 const search = reactive({
   data: '',
@@ -76,9 +79,11 @@ const openModal = () => {
 }
 
 // Запрет прокрутки
-// watch(isScrollDisabled, () => {
-//   document.body.style.overflow = value ? 'hidden' : ''
-// })
+watch(isScrollDisabled, () => {
+  isScrollDisabled.value
+    ? (document.body.style.overflow = 'hidden')
+    : (document.body.style.overflow = '')
+})
 
 // ============ Orders ===============
 const createOrder = async () => {
@@ -120,6 +125,12 @@ onMounted(async () => {
   // Достаем данные из локальной корзины (Если имеются)
   const localCart = localStorage.getItem('cart')
   cart.value = localCart ? JSON.parse(localCart) : []
+
+  // Проверка существования JWT токена, и смена флага в хранилище
+  store.commit('setLogin', checkCookie())
+  // checkCookie() ? commit('setLogin', true) : commit('setLogin', false)
+  // store.commit('setLogin', true)
+  console.log(store.state.isLogin)
 })
 
 provide('cart', {
