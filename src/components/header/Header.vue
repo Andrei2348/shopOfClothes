@@ -36,14 +36,14 @@
                 @click="showSearchInput"
               />
             </li>
-            <li class="header__profile-item" @click="() => emit('openModal')" v-if="login === true">
+            <li class="header__profile-item" @click="() => emit('openModal')" v-if="login === false">
               <img
                 class="header__profile-item--icon"
                 src="/public/icons/user.svg"
                 alt="User"
               />
             </li>
-            <li class="header__profile-item" @click="() => emit('logout')" v-else>
+            <li class="header__profile-item" @click="() => emit('setFlagLogin', false)" v-else>
               <img
                 class="header__profile-item--icon"
                 src="/public/icons/logout.svg"
@@ -90,20 +90,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import InfoCount from '../UI/InfoCount.vue'
 import debounce from 'lodash.debounce'
 
 const store = useStore()
-const login = store.state.isLogin
 const switcher = ref(false)
 defineProps({
   totalCount: Number,
-  totalFavorCount: Number,
 })
 
-const emit = defineEmits(['searchEvent', 'openCart', 'openModal', 'logout'])
+const login = computed(() => store.state.isLogin);
+const emit = defineEmits(['searchEvent', 'openCart', 'openModal', 'setFlagLogin'])
 
 const onChangeSearchInput = debounce((event) => {
   emit('searchEvent', event.target.value)

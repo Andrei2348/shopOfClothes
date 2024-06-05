@@ -8,10 +8,11 @@ import Home from './components/home/Home.vue'
 import Favorites from './components/favorites/Favorites.vue'
 import Cart from './components/cart/Cart.vue'
 
+
 const app = createApp(App)
 const routes = [
   { path: '/', name: 'home', component: Home, props: true },
-  { path: '/favorites', name: 'favorites', component: Favorites, props: true },
+  { path: '/favorites', name: 'favorites', component: Favorites, props: true},
   { path: '/cart', name: 'cart', component: Cart, props: true },
 ]
 
@@ -24,3 +25,4 @@ app.use(autoAnimatePlugin)
 app.use(router)
 app.use(store)
 app.mount('#app')
+

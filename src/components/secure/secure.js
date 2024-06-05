@@ -1,6 +1,5 @@
 export const saveJWT = (jwtData) => {
   document.cookie = `shopOfClothes=${jwtData}; path=/;`
-  console.log('jwt ok')
 }
 
 export const checkCookie = () => {

@@ -53,7 +53,12 @@ import { saveJWT } from './../secure/secure.js'
 
 const switcher = ref('login')
 const message = ref('')
-const emit = defineEmits(['openModal'])
+const emit = defineEmits(['openModal', 'setFlagLogin'])
+
+const switchAlertModal = (mess) => {
+  switcher.value = 'alert'
+  message.value = mess
+}
 
 const loginUser = async (result) => {
   try {
@@ -61,8 +66,9 @@ const loginUser = async (result) => {
       'https://78f27ce1435ab43d.mokky.dev/auth',
       result
     )
-    console.log(data)
     saveJWT(data.token)
+    switchAlertModal(messagesInfo[2])
+    emit('setFlagLogin', true)
     return data
   } catch (error) {
     console.log(error)
@@ -70,18 +76,18 @@ const loginUser = async (result) => {
 }
 
 const registerUser = async (result) => {
-  switcher.value = 'alert'
   try {
     const { data } = await axios.post(
       'https://78f27ce1435ab43d.mokky.dev/register',
       JSON.stringify(result)
     )
     console.log(data.token)
-    message.value = messagesInfo[0]
+    switchAlertModal(messagesInfo[0])
     saveJWT(data.token)
+    emit('setFlagLogin', true)
     return data
   } catch (error) {
-    message.value = messagesInfo[1]
+    switchAlertModal(messagesInfo[1])
     console.log(error)
   }
 }
@@ -91,9 +97,11 @@ const registerUser = async (result) => {
 .modal__layer {
   height: 100vh;
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
+  bottom: 0;
   left: 0;
+  right: 0;
   background-color: #21212142;
   z-index: 1100;
 }

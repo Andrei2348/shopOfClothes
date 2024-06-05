@@ -5,6 +5,7 @@
     <FilterSelector @onChangeSelect="(data) => emit('onChangeSelect', data)" />
   </div>
   <div ref="parent" class="cards__wrapper">
+    
     <Card
       v-for="item in items"
       :id="item.id"

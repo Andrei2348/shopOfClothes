@@ -2,11 +2,12 @@
 <template>
   <main class="main">
     <transition name="modal">
-      <Modal v-if="isModalOpen" @openModal="openModal" />
+      <Modal v-if="isModalOpen" @openModal="openModal" @setFlagLogin="setFlagLogin" />
     </transition>
     <Header
       @searchEvent="onChangeSearchInput"
       @openModal="openModal"
+      @setFlagLogin="setFlagLogin"
       :totalCount="totalCount"
     />
     <div class="container">
@@ -121,16 +122,23 @@ const addToCart = (item) => {
   localStorage.setItem('cart', JSON.stringify(cart.value))
 }
 
+const setFlagLogin = (item) => {
+  store.commit('setLogin', item)
+  if(item === false){
+    document.cookie = `shopOfClothes=expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+  }
+}
+
 onMounted(async () => {
   // Достаем данные из локальной корзины (Если имеются)
   const localCart = localStorage.getItem('cart')
   cart.value = localCart ? JSON.parse(localCart) : []
 
   // Проверка существования JWT токена, и смена флага в хранилище
-  store.commit('setLogin', checkCookie())
+  setFlagLogin(checkCookie())
+  // store.commit('setLogin', checkCookie())
   // checkCookie() ? commit('setLogin', true) : commit('setLogin', false)
   // store.commit('setLogin', true)
-  console.log(store.state.isLogin)
 })
 
 provide('cart', {
