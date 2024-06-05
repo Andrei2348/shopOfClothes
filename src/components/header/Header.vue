@@ -36,14 +36,22 @@
                 @click="showSearchInput"
               />
             </li>
-            <li class="header__profile-item" @click="() => emit('openModal')" v-if="login === false">
+            <li
+              class="header__profile-item"
+              @click="() => emit('openModal')"
+              v-if="login === false"
+            >
               <img
                 class="header__profile-item--icon"
                 src="/public/icons/user.svg"
                 alt="User"
               />
             </li>
-            <li class="header__profile-item" @click="() => emit('setFlagLogin', false)" v-else>
+            <li
+              class="header__profile-item"
+              @click="() => emit('setFlagLogin', false)"
+              v-else
+            >
               <img
                 class="header__profile-item--icon"
                 src="/public/icons/logout.svg"
@@ -90,129 +98,135 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useStore } from 'vuex'
-import InfoCount from '../UI/InfoCount.vue'
-import debounce from 'lodash.debounce'
+  import { ref, computed } from "vue";
+  import { useStore } from "vuex";
+  import InfoCount from "../UI/InfoCount.vue";
+  import debounce from "lodash.debounce";
 
-const store = useStore()
-const switcher = ref(false)
-defineProps({
-  totalCount: Number,
-})
+  const store = useStore();
+  const switcher = ref(false);
+  defineProps({
+    totalCount: Number,
+  });
 
-const login = computed(() => store.state.isLogin);
-const emit = defineEmits(['searchEvent', 'openCart', 'openModal', 'setFlagLogin'])
+  const login = computed(() => store.state.isLogin);
+  const emit = defineEmits([
+    "searchEvent",
+    "openCart",
+    "openModal",
+    "setFlagLogin",
+  ]);
 
-const onChangeSearchInput = debounce((event) => {
-  emit('searchEvent', event.target.value)
-}, 800)
+  const onChangeSearchInput = debounce((event) => {
+    emit("searchEvent", event.target.value);
+  }, 800);
 
-const showSearchInput = () => {
-  switcher.value = !switcher.value
-}
+  const showSearchInput = () => {
+    switcher.value = !switcher.value;
+  };
 </script>
 
 <style scoped>
-.header {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 30;
-}
-.header__title-text {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  padding: 18px 0 20px;
-  color: #565656;
-  text-align: center;
-  text-transform: uppercase;
-  background-color: #fff;
-}
-.header__wrapper {
-  background-color: #1d1d1d;
-}
-.header__logo {
-  height: 24px;
-  width: 53px;
-  margin-right: 103px;
-}
-.header__menu-items,
-.header__profile-items {
-  display: flex;
-  align-items: center;
-}
-.header__profile-items {
-  gap: 20px;
-}
-.header__menu-item {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  color: #fff;
-  text-transform: uppercase;
-  padding: 29px 34px;
-  position: relative;
-}
-.header__content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.header__profile-item,
-.header__menu-item {
-  cursor: pointer;
-}
-.header__profile-item {
-  position: relative;
-}
-.header__categories {
-  background: #fff;
-}
-.header__categories-items {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 0 22px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 14px;
-  color: #565656;
-  cursor: pointer;
-  text-transform: uppercase;
-  gap: 24px;
-}
-.header__profile-item--icon {
-  height: 24px;
-  width: 24px;
-  display: inline-block;
-}
-.header__profile-search {
-  font-size: 16px;
-  padding: 0px 10px;
-  position: absolute;
+  .header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 30;
+    background-color: #fff;
+  }
+  .header__title-text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 18px 0 20px;
+    color: #565656;
+    text-align: center;
+    text-transform: uppercase;
+    /* background-color: #fff; */
+  }
+  .header__wrapper {
+    background-color: #1d1d1d;
+  }
+  .header__logo {
+    height: 24px;
+    width: 53px;
+    margin-right: 103px;
+  }
+  .header__menu-items,
+  .header__profile-items {
+    display: flex;
+    align-items: center;
+  }
+  .header__profile-items {
+    gap: 20px;
+  }
+  .header__menu-item {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 29px 34px;
+    position: relative;
+  }
+  .header__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header__profile-item,
+  .header__menu-item {
+    cursor: pointer;
+  }
+  .header__profile-item {
+    position: relative;
+  }
+  .header__categories {
+    background: #fff;
+  }
+  .header__categories-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0 22px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 14px;
+    color: #565656;
+    cursor: pointer;
+    text-transform: uppercase;
+    gap: 24px;
+  }
+  .header__profile-item--icon {
+    height: 24px;
+    width: 24px;
+    display: inline-block;
+  }
+  .header__profile-search {
+    font-size: 16px;
+    padding: 0px 10px;
+    position: absolute;
 
-  top: 50%;
-  transform: translateY(-50%);
-  left: -160px;
-  border: none;
-  border-radius: 4px;
-  background: #565656;
-  color: #fff;
-  outline: none;
-  transition: ease all 1s;
-  opacity: 0;
-  width: 150px;
-  height: 0;
-  visibility: hidden;
-}
-.header__profile-search.visible {
-  height: 100%;
-  padding: 6px;
-  padding-bottom: 6px;
-  opacity: 1;
-  visibility: visible;
-}
+    top: 50%;
+    transform: translateY(-50%);
+    left: -160px;
+    border: none;
+    border-radius: 4px;
+    background: #565656;
+    color: #fff;
+    outline: none;
+    transition: ease all 1s;
+    opacity: 0;
+    width: 150px;
+    height: 0;
+    visibility: hidden;
+  }
+  .header__profile-search.visible {
+    height: 100%;
+    padding: 6px;
+    padding-bottom: 6px;
+    opacity: 1;
+    visibility: visible;
+  }
 </style>
