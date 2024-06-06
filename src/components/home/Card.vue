@@ -22,9 +22,9 @@
       <img
         class="card__bag"
         :src="
-          !isAdded
-            ? '/public/icons/card_bag.svg'
-            : '/public/icons/card_bag-off.svg'
+          isAdded && isLogin
+            ? '/public/icons/card_bag-off.svg'
+            : '/public/icons/card_bag.svg'
         "
         alt="Bag"
         @click="onClcikAdd"
@@ -34,6 +34,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
+
+const isLogin = computed(() => store.state.isLogin)
+
 defineProps({
   id: Number,
   title: String,

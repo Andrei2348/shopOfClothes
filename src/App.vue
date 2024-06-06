@@ -2,7 +2,11 @@
 <template>
   <main class="main">
     <transition name="modal">
-      <Modal v-if="isModalOpen" @openModal="openModal" @setFlagLogin="setFlagLogin" />
+      <Modal
+        v-if="isModalOpen"
+        @openModal="openModal"
+        @setFlagLogin="setFlagLogin"
+      />
     </transition>
     <Header
       @searchEvent="onChangeSearchInput"
@@ -24,7 +28,7 @@ import { useStore } from 'vuex'
 import Header from './components/header/Header.vue'
 import Modal from './components/modals/Modal.vue'
 import Footer from './components/footer/Footer.vue'
-import { checkCookie } from './components/secure/secure.js'
+import { checkCookie, removeJWT } from './components/secure/secure.js'
 
 const store = useStore()
 const cart = ref([])
@@ -71,17 +75,15 @@ const onChangeSearchInput = (data) => {
 }
 
 // ============ Модальные окна ============
-const isModalOpen = ref(false)
-const isScrollDisabled = ref(false)
+const isModalOpen = computed(() => store.state.isModalOpen)
 
 const openModal = () => {
-  isModalOpen.value = !isModalOpen.value
-  isScrollDisabled.value = !isScrollDisabled.value
+  store.commit('setModalOpen', !store.state.isModalOpen)
 }
 
 // Запрет прокрутки
-watch(isScrollDisabled, () => {
-  isScrollDisabled.value
+watch(isModalOpen, () => {
+  store.state.isModalOpen
     ? (document.body.style.overflow = 'hidden')
     : (document.body.style.overflow = '')
 })
@@ -108,24 +110,28 @@ const createOrder = async () => {
 
 const addToCart = (item) => {
   // Если в корзине нет выбранного товара, добавляем в корзину товар, иначе удаляем
-  item.isAdded = !item.isAdded
-  if (item.isAdded) {
-    const obj = {
-      ...item,
-      sum: item.price,
-      count: 1,
+  if (store.state.isLogin) {
+    item.isAdded = !item.isAdded
+    if (item.isAdded) {
+      const obj = {
+        ...item,
+        sum: item.price,
+        count: 1,
+      }
+      cart.value.push(obj)
+    } else {
+      cart.value.splice(cart.value.indexOf(item), 1)
     }
-    cart.value.push(obj)
+    localStorage.setItem('cart', JSON.stringify(cart.value))
   } else {
-    cart.value.splice(cart.value.indexOf(item), 1)
+    openModal()
   }
-  localStorage.setItem('cart', JSON.stringify(cart.value))
 }
 
 const setFlagLogin = (item) => {
   store.commit('setLogin', item)
-  if(item === false){
-    document.cookie = `shopOfClothes=expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+  if (item === false) {
+    removeJWT()
   }
 }
 
@@ -136,9 +142,6 @@ onMounted(async () => {
 
   // Проверка существования JWT токена, и смена флага в хранилище
   setFlagLogin(checkCookie())
-  // store.commit('setLogin', checkCookie())
-  // checkCookie() ? commit('setLogin', true) : commit('setLogin', false)
-  // store.commit('setLogin', true)
 })
 
 provide('cart', {

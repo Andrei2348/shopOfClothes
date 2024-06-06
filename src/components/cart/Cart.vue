@@ -54,7 +54,9 @@
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { inject, computed, watch } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
 import CartItemList from './CartItemList.vue'
 import CartInfo from './CartInfo.vue'
@@ -62,8 +64,16 @@ import Delivery from './Delivery.vue'
 import ClientInfo from './ClientInfo.vue'
 
 const [parent] = useAutoAnimate()
+const store = useStore()
+const router = useRouter()
 const { createOrder, totalPrice, totalCount, totalSum, discount } =
   inject('cart')
+const isLogin = computed(() => store.state.isLogin)
+watch(isLogin, () => {
+  if (!store.state.isLogin) {
+    router.push({ name: 'home' })
+  }
+})
 </script>
 
 <style scoped>

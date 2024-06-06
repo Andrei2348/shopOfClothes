@@ -76,7 +76,7 @@
                   alt="Bag"
                   @click="() => emit('openCart')"
                 />
-                <InfoCount :totalCount="totalCount" />
+                <InfoCount :totalCount="totalCount" v-if="login === true" />
               </router-link>
             </li>
           </ul>
@@ -143,7 +143,6 @@
     color: #565656;
     text-align: center;
     text-transform: uppercase;
-    /* background-color: #fff; */
   }
   .header__wrapper {
     background-color: #1d1d1d;

@@ -1,14 +1,13 @@
 export const saveJWT = (jwtData) => {
-  document.cookie = `shopOfClothes=${jwtData}; path=/;`
+  localStorage.setItem('shopOfClothes', jwtData)
+}
+
+export const removeJWT = () => {
+  localStorage.removeItem('shopOfClothes')
 }
 
 export const checkCookie = () => {
-  let cookieValue = document.cookie
-  if(cookieValue){
-    cookieValue
-    .split('; ')
-    .find((row) => row.startsWith('shopOfClothes'))
-    .split('=')[1]
+  if (localStorage.getItem('shopOfClothes')) {
     return true
   } else {
     return false

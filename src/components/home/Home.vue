@@ -30,8 +30,6 @@ watch(searchData, (searchValue) => {
   filters.searchQuery = searchValue.data
 })
 
-
-
 // Функция сортировки
 const onChangeSelect = (data) => {
   filters.sortBy = data
