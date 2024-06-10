@@ -18,6 +18,10 @@ import CardList from './CardList.vue'
 import MainStartPage from '../main/MainStartPage.vue'
 const { cart, addToCart } = inject('cart')
 
+
+import store from './../../store/index.js'
+console.log(store.state.isLogin)
+
 const filters = reactive({
   sortBy: 'title',
   searchQuery: '',

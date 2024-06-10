@@ -74,6 +74,9 @@ watch(isLogin, () => {
     router.push({ name: 'home' })
   }
 })
+
+
+
 </script>
 
 <style scoped>

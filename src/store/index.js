@@ -3,7 +3,8 @@ import { createStore } from 'vuex'
 const store = createStore({
   state: {
     isLogin: false,
-    isModalOpen: false
+    isModalOpen: false,
+    personObject: {}
   },
   mutations: {
     setLogin(state, payload) {
@@ -12,6 +13,9 @@ const store = createStore({
     setModalOpen(state, payload) {
       state.isModalOpen = payload
     },
+    setPersonObject(state, payload) {
+      state.personObject = payload
+    }
   },
 })
 

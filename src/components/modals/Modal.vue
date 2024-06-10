@@ -45,12 +45,14 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
+import { useStore } from 'vuex'
 import ModalLogin from './ModalLogin.vue'
 import ModalRegister from './ModalRegister.vue'
 import ModalAlert from './ModalAlert.vue'
 import messagesInfo from './mess.js'
 import { saveJWT } from './../secure/secure.js'
 
+const store = useStore()
 const switcher = ref('login')
 const message = ref('')
 const emit = defineEmits(['openModal', 'setFlagLogin'])
@@ -60,15 +62,20 @@ const switchAlertModal = (mess) => {
   message.value = mess
 }
 
+const saveLoginPersonal = (data) => {
+  saveJWT(data.token)
+  store.commit('setPersonObject', data.data)
+  emit('setFlagLogin', true)
+}
+
 const loginUser = async (result) => {
   try {
     const { data } = await axios.post(
       'https://78f27ce1435ab43d.mokky.dev/auth',
       result
     )
-    saveJWT(data.token)
+    saveLoginPersonal(data)
     switchAlertModal(messagesInfo[2])
-    emit('setFlagLogin', true)
     return data
   } catch (error) {
     console.log(error)
@@ -81,10 +88,8 @@ const registerUser = async (result) => {
       'https://78f27ce1435ab43d.mokky.dev/register',
       JSON.stringify(result)
     )
-    console.log(data.token)
     switchAlertModal(messagesInfo[0])
-    saveJWT(data.token)
-    emit('setFlagLogin', true)
+    saveLoginPersonal(data)
     return data
   } catch (error) {
     switchAlertModal(messagesInfo[1])

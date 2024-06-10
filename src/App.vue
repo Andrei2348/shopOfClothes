@@ -24,13 +24,15 @@
 <script setup>
 import { computed, ref, reactive, provide, onMounted, watch } from 'vue'
 import axios from 'axios'
-import { useStore } from 'vuex'
+import store from './store/index.js'
+// import { useStore } from 'vuex'
 import Header from './components/header/Header.vue'
 import Modal from './components/modals/Modal.vue'
 import Footer from './components/footer/Footer.vue'
-import { checkCookie, removeJWT } from './components/secure/secure.js'
+import { checkJWT, removeJWT } from './components/secure/secure.js'
 
-const store = useStore()
+
+// const store = useStore()
 const cart = ref([])
 const search = reactive({
   data: '',
@@ -135,13 +137,13 @@ const setFlagLogin = (item) => {
   }
 }
 
-onMounted(async () => {
+onMounted(() => {
   // Достаем данные из локальной корзины (Если имеются)
   const localCart = localStorage.getItem('cart')
   cart.value = localCart ? JSON.parse(localCart) : []
 
   // Проверка существования JWT токена, и смена флага в хранилище
-  setFlagLogin(checkCookie())
+  setFlagLogin(checkJWT())
 })
 
 provide('cart', {
